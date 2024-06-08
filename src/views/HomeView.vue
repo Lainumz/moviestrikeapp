@@ -48,7 +48,7 @@ const filterMovies = () => {
 const loading = ref(true)
 
 onMounted(async () => {
-  await movieStore.fetchMovies(5)
+  await movieStore.fetchMovies(10) // Ajusta el número de páginas que deseas obtener para más variedad
   await movieStore.fetchGenres()
   movies.value = movieStore.movies
   genres.value = movieStore.genres

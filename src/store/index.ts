@@ -25,19 +25,26 @@ export const useMovieStore = defineStore('movieStore', {
   actions: {
     async fetchMovies (pages = 5) {
       this.movies = [] // Resetear las películas antes de cargar nuevas
+      const movieIds = new Set<number>() // Usar un set para evitar duplicados
+
       try {
         for (let page = 1; page <= pages; page++) {
           const response = await axios.get(`${apiUrl}/movie/popular`, {
             params: { api_key: apiKey, page }
           })
           console.log(`API Response for page ${page}:`, response.data)
-          const mappedMovies = response.data.results.map((movie: any) => ({
-            id: movie.id,
-            title: movie.title,
-            posterPath: movie.poster_path,
-            genreIds: movie.genre_ids
-          }))
-          this.movies.push(...mappedMovies)
+
+          response.data.results.forEach((movie: any) => {
+            if (!movieIds.has(movie.id)) {
+              movieIds.add(movie.id)
+              this.movies.push({
+                id: movie.id,
+                title: movie.title,
+                posterPath: movie.poster_path,
+                genreIds: movie.genre_ids
+              })
+            }
+          })
         }
       } catch (error) {
         console.error('Error fetching movies:', error)
