@@ -1,17 +1,28 @@
 <template>
   <div>
     <h1>Popular Movies</h1>
-    <div v-if="loading">Loading movies...</div>
-    <div v-else-if="movies.length">
-      <div v-for="movie in movies" :key="movie.id" class="movie">
-        <router-link :to="{ name: 'movieDetail', params: { id: movie.id } }">
-          <img :src="'https://image.tmdb.org/t/p/w500' + movie.poster_path" :alt="movie.title" />
-          <h2>{{ movie.title }}</h2>
-        </router-link>
-      </div>
-    </div>
+    <div v-if="loading">Loading movies and genres...</div>
     <div v-else>
-      <p>No movies available.</p>
+      <div>
+        <label for="genre">Select Genre:</label>
+        <select v-model="selectedGenre" @change="filterMovies">
+          <option value="" selected>All</option>
+          <option v-for="genre in genres" :key="genre.id" :value="genre.id">
+            {{ genre.name }}
+          </option>
+        </select>
+      </div>
+      <div v-if="filteredMovies.length">
+        <div v-for="movie in filteredMovies" :key="movie.id" class="movie">
+          <router-link :to="{ name: 'movieDetail', params: { id: movie.id } }">
+            <img :src="'https://image.tmdb.org/t/p/w500' + movie.posterPath" :alt="movie.title" />
+            <h2>{{ movie.title }}</h2>
+          </router-link>
+        </div>
+      </div>
+      <div v-else>
+        <p>No movies available.</p>
+      </div>
     </div>
   </div>
 </template>
@@ -22,11 +33,26 @@ import { useMovieStore } from '@/store'
 
 const movieStore = useMovieStore()
 const movies = ref(movieStore.movies)
+const genres = ref(movieStore.genres)
+const filteredMovies = ref(movieStore.movies)
+const selectedGenre = ref<number | string>('')
+
+const filterMovies = () => {
+  if (selectedGenre.value) {
+    filteredMovies.value = movieStore.getMoviesByGenre(Number(selectedGenre.value))
+  } else {
+    filteredMovies.value = movieStore.movies
+  }
+}
+
 const loading = ref(true)
 
 onMounted(async () => {
   await movieStore.fetchMovies(5)
+  await movieStore.fetchGenres()
   movies.value = movieStore.movies
+  genres.value = movieStore.genres
+  filteredMovies.value = movieStore.movies
   loading.value = false
 })
 </script>

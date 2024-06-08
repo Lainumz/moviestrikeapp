@@ -4,10 +4,23 @@ import axios from 'axios'
 const apiKey = process.env.VUE_APP_TMDB_API_KEY
 const apiUrl = 'https://api.themoviedb.org/3'
 
+interface Genre {
+  id: number,
+  name: string
+}
+
+interface Movie {
+  id: number,
+  title: string,
+  posterPath: string,
+  genreIds: number[]
+}
+
 export const useMovieStore = defineStore('movieStore', {
   state: () => ({
-    movies: [] as Array<any>,
-    movieDetail: null as any
+    movies: [] as Movie[],
+    movieDetail: null as any,
+    genres: [] as Genre[]
   }),
   actions: {
     async fetchMovies (pages = 5) {
@@ -18,13 +31,30 @@ export const useMovieStore = defineStore('movieStore', {
             params: { api_key: apiKey, page }
           })
           console.log(`API Response for page ${page}:`, response.data)
-          this.movies.push(...response.data.results)
+          const mappedMovies = response.data.results.map((movie: any) => ({
+            id: movie.id,
+            title: movie.title,
+            posterPath: movie.poster_path,
+            genreIds: movie.genre_ids
+          }))
+          this.movies.push(...mappedMovies)
         }
       } catch (error) {
         console.error('Error fetching movies:', error)
       }
     },
-    async fetchMovieDetail (id: number) {
+    async fetchGenres() {
+      try {
+        const response = await axios.get(`${apiUrl}/genre/movie/list`, {
+          params: { api_key: apiKey }
+        })
+        this.genres = response.data.genres
+        console.log('Genres:', this.genres)
+      } catch (error) {
+        console.error('Error fetching genres:', error)
+      }
+    },
+    async fetchMovieDetail(id: number) {
       try {
         const response = await axios.get(`${apiUrl}/movie/${id}`, {
           params: { api_key: apiKey }
@@ -33,9 +63,13 @@ export const useMovieStore = defineStore('movieStore', {
       } catch (error) {
         console.error('Error fetching movie detail:', error)
       }
+    },
+    getMoviesByGenre(genreId: number): Movie[] {
+      return this.movies.filter(movie => movie.genreIds.includes(genreId))
     }
   }
 })
+
 
 
 
