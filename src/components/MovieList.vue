@@ -3,15 +3,6 @@
     <h1>Películas</h1>
     <div v-if="loading">Loading movies and genres...</div>
     <div v-else>
-      <div>
-        <label for="genre">Select Genre:</label>
-        <select v-model="selectedGenre" @change="filterMovies">
-          <option value="" selected>All</option>
-          <option v-for="genre in genres" :key="genre.id" :value="genre.id">
-            {{ genre.name }}
-          </option>
-        </select>
-      </div>
       <div v-if="filteredMovies.length">
         <div v-for="movie in filteredMovies" :key="movie.id" class="movie">
           <router-link :to="{ name: 'movieDetail', params: { id: movie.id } }">
@@ -32,30 +23,16 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import { useMovieStore } from '@/store/movies'
-import { useGenreStore } from '@/store/genres'
 
 const movieStore = useMovieStore()
-const genreStore = useGenreStore()
 const movies = ref(movieStore.movies)
-const genres = ref(genreStore.genres)
 const filteredMovies = ref(movieStore.movies)
-const selectedGenre = ref<number | string>('')
-
-const filterMovies = () => {
-  if (selectedGenre.value) {
-    filteredMovies.value = movieStore.getMoviesByGenre(Number(selectedGenre.value))
-  } else {
-    filteredMovies.value = movieStore.movies
-  }
-}
 
 const loading = ref(true)
 
 onMounted(async () => {
   await movieStore.fetchMovies(10) // Ajusta el número de páginas que deseas obtener para más variedad
-  await genreStore.fetchGenres()
   movies.value = movieStore.movies
-  genres.value = genreStore.genres
   filteredMovies.value = movieStore.movies
   loading.value = false
 })
@@ -106,7 +83,8 @@ onMounted(async () => {
   visibility: visible;
   opacity: 1;
 }
-h1{
+
+h1 {
   color: white;
 }
 </style>
