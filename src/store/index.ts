@@ -50,7 +50,7 @@ export const useMovieStore = defineStore('movieStore', {
         console.error('Error fetching movies:', error)
       }
     },
-    async fetchGenres() {
+    async fetchGenres () {
       try {
         const response = await axios.get(`${apiUrl}/genre/movie/list`, {
           params: { api_key: apiKey }
@@ -61,7 +61,7 @@ export const useMovieStore = defineStore('movieStore', {
         console.error('Error fetching genres:', error)
       }
     },
-    async fetchMovieDetail(id: number) {
+    async fetchMovieDetail (id: number) {
       try {
         const response = await axios.get(`${apiUrl}/movie/${id}`, {
           params: { api_key: apiKey }
@@ -71,14 +71,8 @@ export const useMovieStore = defineStore('movieStore', {
         console.error('Error fetching movie detail:', error)
       }
     },
-    getMoviesByGenre(genreId: number): Movie[] {
+    getMoviesByGenre (genreId: number): Movie[] {
       return this.movies.filter(movie => movie.genreIds.includes(genreId))
     }
   }
 })
-
-
-
-
-
-
