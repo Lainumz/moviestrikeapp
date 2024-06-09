@@ -60,9 +60,6 @@ onMounted(async () => {
 </script>
 
 <style scoped>
-.movie-list {
-  margin-top: 80px; /* Ajusta este valor si el navbar es más alto */
-}
 
 .movie {
   display: inline-block;
@@ -73,5 +70,8 @@ onMounted(async () => {
 .movie img {
   width: 200px;
   height: 300px;
+}
+h1{
+  color: white;
 }
 </style>

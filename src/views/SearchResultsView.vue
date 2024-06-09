@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="search-results">
     <h1>Resultados de la Búsqueda</h1>
     <div v-if="searchResults.length">
       <div v-for="movie in searchResults" :key="movie.id" class="movie">
@@ -41,11 +41,13 @@ onMounted(async () => {
 </script>
 
 <style scoped>
+
 .movie {
   display: inline-block;
   margin: 10px;
   text-align: center;
 }
+
 .movie img {
   width: 200px;
   height: 300px;
