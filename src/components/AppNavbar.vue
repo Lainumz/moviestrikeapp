@@ -1,7 +1,7 @@
 <template>
   <nav class="navbar">
     <div class="navbar-left">
-      <img src="@/assets/logo.png" alt="Logo" class="logo" />
+      <img src="../assets/logo.png" alt="Logo" class="logo" />
     </div>
     <div class="navbar-center">
       <router-link to="/">Home</router-link>
@@ -46,13 +46,13 @@ const searchMovies = () => {
 .navbar-left {
   display: flex;
   align-items: center;
+  margin-left: 1.5rem
 }
 
 .navbar-center {
   display: flex;
   justify-content: center;
   flex: 1;
-  margin-left: 1.5rem;
 }
 
 .navbar-right {
@@ -62,7 +62,7 @@ const searchMovies = () => {
 }
 
 .logo {
-  height: 40px;
+  height: 60px; /* Aumenta la altura del logo */
   margin-right: 1rem;
 }
 

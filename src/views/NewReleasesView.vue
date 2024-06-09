@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="new-releases">
     <h1>Estrenos</h1>
     <!-- Aquí irá el contenido específico de la sección "Estrenos" -->
   </div>
@@ -7,3 +7,9 @@
 
 <script setup lang="ts">
 </script>
+
+<style scoped>
+.new-releases {
+  color: white;
+}
+</style>
