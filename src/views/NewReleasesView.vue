@@ -9,5 +9,7 @@
 </script>
 
 <style scoped>
-
+.new-releases {
+  color: white;
+}
 </style>

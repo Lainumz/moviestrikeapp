@@ -9,5 +9,7 @@
 </script>
 
 <style scoped>
-
+.top-rated {
+  color: white;
+}
 </style>

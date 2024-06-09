@@ -9,5 +9,7 @@
 </script>
 
 <style scoped>
-
+.categories {
+  color: white;
+}
 </style>

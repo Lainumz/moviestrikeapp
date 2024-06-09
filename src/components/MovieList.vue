@@ -1,6 +1,6 @@
 <template>
   <div class="movie-list">
-    <h1>Popular Movies</h1>
+    <h1>Películas</h1>
     <div v-if="loading">Loading movies and genres...</div>
     <div v-else>
       <div>
@@ -62,9 +62,6 @@ onMounted(async () => {
 </script>
 
 <style scoped>
-.movie-list {
-  margin-top: 80px; /* Ajusta este valor si el navbar es más alto */
-}
 
 .movie {
   display: inline-block;
@@ -108,5 +105,8 @@ onMounted(async () => {
 .tooltip:hover .tooltiptext {
   visibility: visible;
   opacity: 1;
+}
+h1{
+  color: white;
 }
 </style>
