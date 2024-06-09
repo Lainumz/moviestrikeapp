@@ -15,8 +15,10 @@
       <div v-if="filteredMovies.length">
         <div v-for="movie in filteredMovies" :key="movie.id" class="movie">
           <router-link :to="{ name: 'movieDetail', params: { id: movie.id } }">
-            <img :src="'https://image.tmdb.org/t/p/w500' + movie.posterPath" :alt="movie.title" />
-            <h2>{{ movie.title }}</h2>
+            <div class="tooltip">
+              <img :src="'https://image.tmdb.org/t/p/w500' + movie.posterPath" :alt="movie.title" />
+              <span class="tooltiptext">{{ movie.title }}</span>
+            </div>
           </router-link>
         </div>
       </div>
@@ -60,18 +62,51 @@ onMounted(async () => {
 </script>
 
 <style scoped>
+.movie-list {
+  margin-top: 80px; /* Ajusta este valor si el navbar es más alto */
+}
 
 .movie {
   display: inline-block;
   margin: 10px;
   text-align: center;
+  position: relative;
 }
 
 .movie img {
   width: 200px;
   height: 300px;
+  transition: transform 0.2s ease-in-out;
 }
-h1{
-  color: white;
+
+.movie img:hover {
+  transform: scale(1.05);
+}
+
+.tooltip {
+  position: relative;
+  display: inline-block;
+}
+
+.tooltiptext {
+  visibility: hidden;
+  width: 200px;
+  background-color: rgba(0, 0, 0, 0.8);
+  color: #fff;
+  text-align: center;
+  border-radius: 5px;
+  padding: 5px 0;
+  position: absolute;
+  z-index: 1;
+  bottom: 105%; /* Posición encima de la imagen */
+  left: 50%;
+  margin-left: -100px; /* Centrar el tooltip */
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.tooltip:hover .tooltiptext {
+  visibility: visible;
+  opacity: 1;
 }
 </style>
