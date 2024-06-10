@@ -1,12 +1,10 @@
 import { createPinia } from 'pinia'
-
-// Importa los stores específicos
 import { useMovieStore } from './movies'
 import { useGenreStore } from './genres'
-import { useTopRatedStore } from './topRated'
+import { useSeriesStore } from './series' // Asegúrate de importar el nuevo store de series
 
 // Crea una instancia de Pinia
 const pinia = createPinia()
 
 // Exporta la instancia de Pinia y los stores
-export { pinia, useMovieStore, useGenreStore, useTopRatedStore }
+export { pinia, useMovieStore, useGenreStore, useSeriesStore }

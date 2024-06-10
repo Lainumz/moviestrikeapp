@@ -3,7 +3,7 @@
     <h1>Resultados de la Búsqueda</h1>
     <div v-if="searchResults.length">
       <div v-for="movie in searchResults" :key="movie.id" class="movie">
-        <router-link :to="{ name: 'movieDetail', params: { id: movie.id } }">
+        <router-link :to="{ name: 'movies', params: { id: movie.id } }">
           <div class="tooltip">
             <img :src="'https://image.tmdb.org/t/p/w500' + movie.posterPath" :alt="movie.title" />
             <span class="tooltiptext">{{ movie.title }}</span>
