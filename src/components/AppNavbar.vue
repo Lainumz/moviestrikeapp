@@ -1,12 +1,12 @@
 <template>
   <nav class="navbar">
     <div class="navbar-left">
-      <img src="../assets/logo.png" alt="Logo" class="logo" />
+      <img src="@/assets/logo.png" alt="Logo" class="logo" />
     </div>
     <div class="navbar-center">
       <router-link to="/">Home</router-link>
-      <router-link to="/top-rated">Mejor Valorado</router-link>
-      <router-link to="/categories">Categorías</router-link>
+      <router-link to="/movies">Películas</router-link>
+      <router-link to="/series">Series</router-link>
       <router-link to="/new-releases">Estrenos</router-link>
     </div>
     <div class="navbar-right">
@@ -24,7 +24,7 @@ const router = useRouter()
 
 const searchMovies = () => {
   if (searchQuery.value.trim()) {
-    router.push({ name: 'search', query: { q: searchQuery.value } })
+    router.push({ name: 'searchResults', query: { q: searchQuery.value } })
   }
 }
 </script>
@@ -46,7 +46,6 @@ const searchMovies = () => {
 .navbar-left {
   display: flex;
   align-items: center;
-  margin-left: 1.5rem
 }
 
 .navbar-center {
@@ -58,7 +57,7 @@ const searchMovies = () => {
 .navbar-right {
   display: flex;
   align-items: center;
-  margin-right: 1.5rem; /* Agrega margen a la derecha */
+  margin-right: 1rem; /* Agrega margen a la derecha */
 }
 
 .logo {
