@@ -3,9 +3,9 @@
     <h1>Resultados de la Búsqueda</h1>
     <div v-if="searchResults.length">
       <div v-for="movie in searchResults" :key="movie.id" class="movie">
-        <router-link :to="{ name: 'movies', params: { id: movie.id } }">
+        <router-link :to="{ name: 'movieDetail', params: { id: movie.id } }">
           <div class="tooltip">
-            <img :src="'https://image.tmdb.org/t/p/w500' + movie.posterPath" :alt="movie.title" />
+            <img :src="'https://image.tmdb.org/t/p/w500' + movie.poster_path" :alt="movie.title" />
             <span class="tooltiptext">{{ movie.title }}</span>
           </div>
         </router-link>
@@ -21,6 +21,7 @@
 import { ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import { useMovieStore } from '@/store/movies'
+import type { Movie } from '@/types/movie'
 
 const route = useRoute()
 const query = ref<string>('')
@@ -32,7 +33,7 @@ if (Array.isArray(route.query.q)) {
 }
 
 const movieStore = useMovieStore()
-const searchResults = ref(movieStore.searchResults)
+const searchResults = ref<Movie[]>(movieStore.searchResults)
 
 // Watch for changes in the route query
 watch(() => route.query.q, async (newQuery) => {
