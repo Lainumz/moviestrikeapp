@@ -150,10 +150,4 @@ button:hover {
 h1 {
   color: white;
 }
-
-.movie img {
-  width: 300px;
-  height: 450px;
-  margin: 20px 0;
-}
 </style>
