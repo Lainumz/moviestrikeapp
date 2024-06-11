@@ -1,45 +1,33 @@
 import { defineStore } from 'pinia'
 import axios from 'axios'
+import type { Series } from '@/types/series'
 
 const apiKey = process.env.VUE_APP_TMDB_API_KEY
 const apiUrl = 'https://api.themoviedb.org/3'
 
-interface Series {
-  id: number,
-  title: string,
-  posterPath: string,
-  genreIds: number[]
-}
-
 export const useSeriesStore = defineStore('seriesStore', {
   state: () => ({
     series: [] as Series[],
-    seriesDetail: null as any
+    seriesDetail: null as Series | null
   }),
   actions: {
-    async fetchSeries (pages = 5) {
-      this.series = [] // Resetear las series antes de cargar nuevas
-      const seriesIds = new Set<number>() // Usar un set para evitar duplicados
-
+    async fetchSeries (pages: number) {
       try {
+        let allSeries: Series[] = []
         for (let page = 1; page <= pages; page++) {
           const response = await axios.get(`${apiUrl}/tv/popular`, {
             params: { api_key: apiKey, page }
           })
-          console.log(`API Response for page ${page}:`, response.data)
-
-          response.data.results.forEach((serie: any) => {
-            if (!seriesIds.has(serie.id)) {
-              seriesIds.add(serie.id)
-              this.series.push({
-                id: serie.id,
-                title: serie.name,
-                posterPath: serie.poster_path,
-                genreIds: serie.genre_ids
-              })
-            }
-          })
+          const series = response.data.results.map((serie: any) => ({
+            id: serie.id,
+            name: serie.name,
+            poster_path: serie.poster_path,
+            overview: serie.overview,
+            genre_ids: serie.genre_ids
+          }))
+          allSeries = allSeries.concat(series)
         }
+        this.series = allSeries
       } catch (error) {
         console.error('Error fetching series:', error)
       }
@@ -49,13 +37,19 @@ export const useSeriesStore = defineStore('seriesStore', {
         const response = await axios.get(`${apiUrl}/tv/${id}`, {
           params: { api_key: apiKey }
         })
-        this.seriesDetail = response.data
+        this.seriesDetail = {
+          id: response.data.id,
+          name: response.data.name,
+          poster_path: response.data.poster_path,
+          overview: response.data.overview,
+          genre_ids: response.data.genres.map((genre: any) => genre.id)
+        }
       } catch (error) {
         console.error('Error fetching series detail:', error)
       }
     },
-    getSeriesByGenre (genreId: number): Series[] {
-      return this.series.filter(serie => serie.genreIds.includes(genreId))
+    getSeriesByGenre (genreId: number) {
+      return this.series.filter(serie => serie.genre_ids.includes(genreId))
     }
   }
 })

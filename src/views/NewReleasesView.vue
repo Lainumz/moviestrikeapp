@@ -1,10 +1,10 @@
 <template>
   <div class="new-releases">
-    <h1>Nuevos Lanzamientos</h1>
-    <div v-if="loading">Loading new releases...</div>
+    <h1>Estrenos</h1>
+    <div v-if="loading">Cargando estrenos...</div>
     <div v-else>
-      <div v-if="movies.length">
-        <div v-for="movie in movies" :key="movie.id" class="movie">
+      <div v-if="newReleases.length">
+        <div v-for="movie in newReleases" :key="movie.id" class="movie">
           <router-link :to="{ name: 'movieDetail', params: { id: movie.id } }">
             <div class="tooltip">
               <img :src="'https://image.tmdb.org/t/p/w500' + movie.poster_path" :alt="movie.title" />
@@ -14,7 +14,7 @@
         </div>
       </div>
       <div v-else>
-        <p>No new releases available.</p>
+        <p>No hay estrenos disponibles.</p>
       </div>
     </div>
   </div>
@@ -23,15 +23,14 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import { useMovieStore } from '@/store/movies'
-import type { Movie } from '@/types/movie'
 
 const movieStore = useMovieStore()
-const movies = ref<Movie[]>([])
+const newReleases = ref(movieStore.newReleases)
 const loading = ref(true)
 
 onMounted(async () => {
-  await movieStore.fetchNewReleases(3) // Ajusta el número de páginas que deseas obtener para más variedad
-  movies.value = movieStore.newReleases
+  await movieStore.fetchNewReleases()
+  newReleases.value = movieStore.newReleases
   loading.value = false
 })
 </script>
@@ -85,5 +84,9 @@ onMounted(async () => {
 .tooltip:hover .tooltiptext {
   visibility: visible;
   opacity: 1;
+}
+
+h1 {
+  color: white;
 }
 </style>
