@@ -30,8 +30,8 @@ const movies = ref<Movie[]>([])
 const loading = ref(true)
 
 onMounted(async () => {
-  await movieStore.fetchMovies(10) // Ajusta el número de páginas que deseas obtener para más variedad
-  movies.value = movieStore.movies
+  await movieStore.fetchNewReleases(3) // Ajusta el número de páginas que deseas obtener para más variedad
+  movies.value = movieStore.newReleases
   loading.value = false
 })
 </script>

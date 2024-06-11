@@ -9,7 +9,8 @@ export const useMovieStore = defineStore('movieStore', {
   state: () => ({
     movies: [] as Movie[],
     movieDetail: null as Movie | null,
-    searchResults: [] as Movie[]
+    searchResults: [] as Movie[],
+    newReleases: [] as Movie[] // Añadimos un nuevo estado para las películas más recientes
   }),
   actions: {
     async fetchMovies (pages: number) {
@@ -44,6 +45,20 @@ export const useMovieStore = defineStore('movieStore', {
         this.searchResults = response.data.results
       } catch (error) {
         console.error('Error searching movies:', error)
+      }
+    },
+    async fetchNewReleases (pages: number) {
+      try {
+        let allNewReleases: Movie[] = []
+        for (let page = 1; page <= pages; page++) {
+          const response = await axios.get(`${apiUrl}/movie/now_playing`, {
+            params: { api_key: apiKey, page }
+          })
+          allNewReleases = allNewReleases.concat(response.data.results)
+        }
+        this.newReleases = allNewReleases
+      } catch (error) {
+        console.error('Error fetching new releases:', error)
       }
     },
     getMoviesByGenre (genreId: number) {
