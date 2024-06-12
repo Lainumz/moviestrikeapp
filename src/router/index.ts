@@ -1,11 +1,11 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import MovieDetailView from '../views/MovieDetailView.vue'
-import SeriesDetailView from '../views/SeriesDetailView.vue'
 import MoviesView from '../views/MoviesView.vue'
-import SeriesView from '../views/SeriesView.vue'
 import NewReleasesView from '../views/NewReleasesView.vue'
 import SearchResultsView from '../views/SearchResultsView.vue'
+import SeriesDetailView from '../views/SeriesDetailView.vue'
+import SeriesView from '../views/SeriesView.vue'
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -19,19 +19,9 @@ const routes: Array<RouteRecordRaw> = [
     component: MovieDetailView
   },
   {
-    path: '/series/:id',
-    name: 'seriesDetail',
-    component: SeriesDetailView
-  },
-  {
     path: '/movies',
     name: 'movies',
     component: MoviesView
-  },
-  {
-    path: '/series',
-    name: 'series',
-    component: SeriesView
   },
   {
     path: '/new-releases',
@@ -39,9 +29,19 @@ const routes: Array<RouteRecordRaw> = [
     component: NewReleasesView
   },
   {
-    path: '/search',
+    path: '/search-results',
     name: 'searchResults',
     component: SearchResultsView
+  },
+  {
+    path: '/series/:id',
+    name: 'seriesDetail',
+    component: SeriesDetailView
+  },
+  {
+    path: '/series',
+    name: 'series',
+    component: SeriesView
   }
 ]
 
