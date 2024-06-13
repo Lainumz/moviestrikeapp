@@ -12,14 +12,19 @@
           </option>
         </select>
       </div>
-      <div v-if="filteredSeries.length">
-        <div v-for="serie in filteredSeries" :key="serie.id" class="serie">
+      <div v-if="paginatedSeries.length">
+        <div v-for="serie in paginatedSeries" :key="serie.id" class="serie">
           <router-link :to="{ name: 'seriesDetail', params: { id: serie.id } }">
             <div class="tooltip">
               <img :src="'https://image.tmdb.org/t/p/w500' + serie.poster_path" :alt="serie.name" />
               <span class="tooltiptext">{{ serie.name }}</span>
             </div>
           </router-link>
+        </div>
+        <div class="pagination">
+          <button @click="prevPage" :disabled="currentPage === 1">Previous</button>
+          <span>Page {{ currentPage }} of {{ totalPages }}</span>
+          <button @click="nextPage" :disabled="currentPage === totalPages">Next</button>
         </div>
       </div>
       <div v-else>
@@ -30,7 +35,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { useSeriesStore } from '@/store/series'
 import { useGenreStore } from '@/store/genres'
 import type { Series } from '@/types/series'
@@ -43,17 +48,41 @@ const filteredSeries = ref<Series[]>([])
 const selectedGenre = ref<number | string>('')
 const loading = ref(true)
 
+const itemsPerPage = 40
+const currentPage = ref(1)
+
+const totalPages = computed(() => Math.ceil(filteredSeries.value.length / itemsPerPage))
+
+const paginatedSeries = computed(() => {
+  const start = (currentPage.value - 1) * itemsPerPage
+  const end = start + itemsPerPage
+  return filteredSeries.value.slice(start, end)
+})
+
 const filterSeries = () => {
   if (selectedGenre.value) {
     filteredSeries.value = seriesStore.getSeriesByGenre(Number(selectedGenre.value)).filter(serie => serie.poster_path)
   } else {
     filteredSeries.value = seriesStore.series.filter(serie => serie.poster_path)
   }
+  currentPage.value = 1 // Reset to the first page when filtering
+}
+
+const prevPage = () => {
+  if (currentPage.value > 1) {
+    currentPage.value--
+  }
+}
+
+const nextPage = () => {
+  if (currentPage.value < totalPages.value) {
+    currentPage.value++
+  }
 }
 
 onMounted(async () => {
   await genreStore.fetchGenres()
-  await seriesStore.fetchSeries(10) // Ajusta el número de páginas que deseas obtener para más variedad
+  await seriesStore.fetchSeries(100) // Fetch more series to ensure we have enough for multiple pages
   genres.value = genreStore.genres
   series.value = Array.from(new Set(seriesStore.series.map(serie => serie.id)))
     .map(id => seriesStore.series.find(serie => serie.id === id))
@@ -151,5 +180,16 @@ button:hover {
 
 h1 {
   color: white;
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.pagination button {
+  margin: 0 10px;
 }
 </style>
