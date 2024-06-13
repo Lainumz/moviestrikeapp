@@ -48,8 +48,9 @@ export const useSeriesStore = defineStore('seriesStore', {
         console.error('Error fetching series detail:', error)
       }
     },
-    getSeriesByGenre (genreId: number) {
-      return this.series.filter(serie => serie.genre_ids.includes(genreId))
+    getSeriesByGenre (genreId: number): Series[] {
+      return Array.from(new Set(this.series))
+        .filter((serie) => serie.genre_ids.includes(genreId))
     }
   }
 })
