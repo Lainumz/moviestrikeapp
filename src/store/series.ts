@@ -13,19 +13,12 @@ export const useSeriesStore = defineStore('seriesStore', {
   actions: {
     async fetchSeries (pages: number) {
       try {
-        let allSeries: Series[] = []
+        const allSeries = []
         for (let page = 1; page <= pages; page++) {
           const response = await axios.get(`${apiUrl}/tv/popular`, {
             params: { api_key: apiKey, page }
           })
-          const series = response.data.results.map((serie: any) => ({
-            id: serie.id,
-            name: serie.name,
-            poster_path: serie.poster_path,
-            overview: serie.overview,
-            genre_ids: serie.genre_ids
-          }))
-          allSeries = allSeries.concat(series)
+          allSeries.push(...response.data.results)
         }
         this.series = allSeries
       } catch (error) {
@@ -37,13 +30,7 @@ export const useSeriesStore = defineStore('seriesStore', {
         const response = await axios.get(`${apiUrl}/tv/${id}`, {
           params: { api_key: apiKey }
         })
-        this.seriesDetail = {
-          id: response.data.id,
-          name: response.data.name,
-          poster_path: response.data.poster_path,
-          overview: response.data.overview,
-          genre_ids: response.data.genres.map((genre: any) => genre.id)
-        }
+        this.seriesDetail = response.data
       } catch (error) {
         console.error('Error fetching series detail:', error)
       }
