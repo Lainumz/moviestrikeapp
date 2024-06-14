@@ -1,13 +1,9 @@
 import { defineStore } from 'pinia'
 import axios from 'axios'
+import type { Genre } from '@/types/genres'
 
 const apiKey = process.env.VUE_APP_TMDB_API_KEY
 const apiUrl = 'https://api.themoviedb.org/3'
-
-interface Genre {
-  id: number,
-  name: string
-}
 
 export const useGenreStore = defineStore('genreStore', {
   state: () => ({
@@ -20,9 +16,18 @@ export const useGenreStore = defineStore('genreStore', {
           params: { api_key: apiKey }
         })
         this.genres = response.data.genres
-        console.log('Genres:', this.genres)
       } catch (error) {
         console.error('Error fetching genres:', error)
+      }
+    },
+    async fetchSeriesGenres () {
+      try {
+        const response = await axios.get(`${apiUrl}/genre/tv/list`, {
+          params: { api_key: apiKey }
+        })
+        this.genres = response.data.genres
+      } catch (error) {
+        console.error('Error fetching series genres:', error)
       }
     }
   }

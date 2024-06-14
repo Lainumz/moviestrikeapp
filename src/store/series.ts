@@ -13,12 +13,18 @@ export const useSeriesStore = defineStore('seriesStore', {
   actions: {
     async fetchSeries (pages: number) {
       try {
-        const allSeries = []
+        const allSeries: Series[] = []
+        const seriesIds = new Set<number>()
         for (let page = 1; page <= pages; page++) {
           const response = await axios.get(`${apiUrl}/tv/popular`, {
             params: { api_key: apiKey, page }
           })
-          allSeries.push(...response.data.results)
+          response.data.results.forEach((serie: Series) => {
+            if (!seriesIds.has(serie.id) && serie.poster_path) {
+              seriesIds.add(serie.id)
+              allSeries.push(serie)
+            }
+          })
         }
         this.series = allSeries
       } catch (error) {
