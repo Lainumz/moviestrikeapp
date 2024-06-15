@@ -26,12 +26,12 @@ import { useMovieStore } from '@/store/movies'
 import type { Movie } from '@/types/movie'
 
 const movieStore = useMovieStore()
-const newReleases = ref<Movie[]>([])
+const newReleases = ref<Movie[]>(movieStore.newReleases)
 const loading = ref(true)
 
 onMounted(async () => {
-  await movieStore.fetchNewReleases(1) // Obtén solo la primera página de las nuevas películas
-  newReleases.value = movieStore.newReleases.slice(0, 10) // Solo muestra las primeras 10 películas
+  await movieStore.fetchNewReleases() // Llamada sin argumentos
+  newReleases.value = movieStore.newReleases
   loading.value = false
 })
 </script>
@@ -85,22 +85,5 @@ onMounted(async () => {
 .tooltip:hover .tooltiptext {
   visibility: visible;
   opacity: 1;
-}
-
-button {
-  padding: 10px 20px;
-  border: none;
-  border-radius: 5px;
-  background-color: #444;
-  color: white;
-  cursor: pointer;
-}
-
-button:hover {
-  background-color: #555;
-}
-
-h1 {
-  color: white;
 }
 </style>

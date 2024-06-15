@@ -47,16 +47,12 @@ export const useMovieStore = defineStore('movieStore', {
         console.error('Error searching movies:', error)
       }
     },
-    async fetchNewReleases (pages: number) {
+    async fetchNewReleases () {
       try {
-        const allNewReleases: Movie[] = []
-        for (let page = 1; page <= pages; page++) {
-          const response = await axios.get(`${apiUrl}/movie/now_playing`, {
-            params: { api_key: apiKey, page }
-          })
-          allNewReleases.push(...response.data.results)
-        }
-        this.newReleases = allNewReleases
+        const response = await axios.get(`${apiUrl}/movie/now_playing`, {
+          params: { api_key: apiKey }
+        })
+        this.newReleases = response.data.results.slice(0, 10)
       } catch (error) {
         console.error('Error fetching new releases:', error)
       }
