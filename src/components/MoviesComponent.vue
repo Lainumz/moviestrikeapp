@@ -13,7 +13,7 @@
         </select>
       </div>
       <div v-if="filteredMovies.length">
-        <div v-for="movie in filteredMovies" :key="movie.id" class="movie">
+        <div v-for="movie in paginatedMovies" :key="movie.id" class="movie">
           <router-link :to="{ name: 'movieDetail', params: { id: movie.id } }">
             <div class="tooltip">
               <img :src="'https://image.tmdb.org/t/p/w500' + movie.poster_path" :alt="movie.title" />
@@ -25,12 +25,17 @@
       <div v-else>
         <p>No movies available.</p>
       </div>
+      <div class="pagination">
+        <button @click="prevPage" :disabled="currentPage === 1">Previous</button>
+        <span>Page {{ currentPage }} of {{ totalPages }}</span>
+        <button @click="nextPage" :disabled="currentPage === totalPages">Next</button>
+      </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { useMovieStore } from '@/store/movies'
 import { useGenreStore } from '@/store/genres'
 import type { Movie } from '@/types/movie'
@@ -42,6 +47,16 @@ const genres = ref(genreStore.genres)
 const filteredMovies = ref<Movie[]>(movieStore.movies)
 const selectedGenre = ref<number | string>('')
 const loading = ref(true)
+const currentPage = ref(1)
+const itemsPerPage = 40
+
+const totalPages = computed(() => Math.ceil(filteredMovies.value.length / itemsPerPage))
+
+const paginatedMovies = computed(() => {
+  const start = (currentPage.value - 1) * itemsPerPage
+  const end = start + itemsPerPage
+  return filteredMovies.value.slice(start, end)
+})
 
 const filterMovies = () => {
   if (selectedGenre.value) {
@@ -49,11 +64,24 @@ const filterMovies = () => {
   } else {
     filteredMovies.value = movieStore.movies
   }
+  currentPage.value = 1 // Reset to first page on filter change
+}
+
+const nextPage = () => {
+  if (currentPage.value < totalPages.value) {
+    currentPage.value++
+  }
+}
+
+const prevPage = () => {
+  if (currentPage.value > 1) {
+    currentPage.value--
+  }
 }
 
 onMounted(async () => {
   await genreStore.fetchGenres()
-  await movieStore.fetchMovies(10) // Ajusta el número de páginas que deseas obtener para más variedad
+  await movieStore.fetchMovies(10) // Cambiar a 10 páginas
   genres.value = genreStore.genres
   movies.value = movieStore.movies
   filteredMovies.value = movieStore.movies
@@ -134,7 +162,12 @@ onMounted(async () => {
   opacity: 1;
 }
 
-button {
+.pagination {
+  margin-top: 20px;
+  text-align: center;
+}
+
+.pagination button {
   padding: 10px 20px;
   border: none;
   border-radius: 5px;
@@ -143,8 +176,13 @@ button {
   cursor: pointer;
 }
 
-button:hover {
+.pagination button:hover {
   background-color: #555;
+}
+
+.pagination span {
+  margin: 0 10px;
+  color: white;
 }
 
 h1 {
