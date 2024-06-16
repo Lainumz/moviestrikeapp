@@ -5,5 +5,7 @@ export interface Series {
     poster_path: string;
     overview: string;
     genre_ids: number[];
+    first_air_date: string;
+    vote_average: number;
   }
   /* eslint-enable camelcase */
