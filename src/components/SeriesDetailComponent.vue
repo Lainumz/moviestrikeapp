@@ -9,7 +9,11 @@
         <h1>{{ series.name }}</h1>
         <p class="overview">{{ series.overview }}</p>
         <p class="additional-info">
-          <span>Genres: </span><span v-for="(genre, index) in genres" :key="genre.id">{{ genre.name }}<span v-if="index < genres.length - 1">, </span></span>
+          <span>Genres: </span>
+          <span v-if="genres.length">
+            <span v-for="(genre, index) in genres" :key="genre.id">{{ genre.name }}<span v-if="index < genres.length - 1">, </span></span>
+          </span>
+          <span v-else>No genres available</span>
         </p>
         <p class="additional-info"><span>First Air Date: </span>{{ series.first_air_date }}</p>
         <p class="rating"><span>Rating: </span>{{ series.vote_average }}/10</p>
@@ -22,7 +26,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useSeriesStore } from '@/store/series'
 import { useGenreStore } from '@/store/genres'
@@ -45,9 +49,13 @@ onMounted(async () => {
   if (seriesId) {
     await seriesStore.fetchSeriesDetail(Number(seriesId))
     series.value = seriesStore.seriesDetail
-    if (series.value) {
-      genres.value = genreStore.genres.filter(genre => series.value?.genre_ids?.includes(genre.id))
-    }
+    await genreStore.fetchSeriesGenres() // Fetch series genres here
+  }
+})
+
+watch([series, genreStore.genres], () => {
+  if (series.value && genreStore.genres.length) {
+    genres.value = genreStore.genres.filter(genre => series.value?.genre_ids?.includes(genre.id))
   }
 })
 </script>
