@@ -9,7 +9,11 @@
         <h1>{{ movie.title }}</h1>
         <p class="overview">{{ movie.overview }}</p>
         <p class="additional-info">
-          <span>Genres: </span><span v-for="(genre, index) in genres" :key="genre.id">{{ genre.name }}<span v-if="index < genres.length - 1">, </span></span>
+          <span>Genres: </span>
+          <span v-if="genres.length">
+            <span v-for="(genre, index) in genres" :key="genre.id">{{ genre.name }}<span v-if="index < genres.length - 1">, </span></span>
+          </span>
+          <span v-else>No genres available</span>
         </p>
         <p class="additional-info"><span>Release Date: </span>{{ movie.release_date }}</p>
         <p class="rating"><span>Rating: </span>{{ movie.vote_average }}/10</p>
@@ -22,7 +26,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useMovieStore } from '@/store/movies'
 import { useGenreStore } from '@/store/genres'
@@ -45,9 +49,13 @@ onMounted(async () => {
   if (movieId) {
     await movieStore.fetchMovieDetail(Number(movieId))
     movie.value = movieStore.movieDetail
-    if (movie.value) {
-      genres.value = genreStore.genres.filter(genre => movie.value?.genre_ids?.includes(genre.id))
-    }
+    await genreStore.fetchGenres() // Fetch genres here
+  }
+})
+
+watch([movie, genreStore.genres], () => {
+  if (movie.value && genreStore.genres.length) {
+    genres.value = genreStore.genres.filter(genre => movie.value?.genre_ids?.includes(genre.id))
   }
 })
 </script>
