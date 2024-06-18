@@ -15,6 +15,7 @@
     "os-browserify": "^0.3.0",
     "path-browserify": "^1.0.1",
     "pinia": "^2.1.4",
+    "swiper": "^11.1.4",
     "vue": "^3.2.13",
     "vue-router": "^4.0.3"
   },
