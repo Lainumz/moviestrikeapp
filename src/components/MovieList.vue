@@ -4,16 +4,13 @@
     <div v-if="loading">Loading movies and genres...</div>
     <div v-else>
       <div class="category">
-        <h2>Más Visto</h2>
-        <MovieSwiper :items="mostViewedMovies" title="Más Visto" />
+        <MovieSwiper :items="mostViewedMovies" title="Más Visto" :isSerie="false" />
       </div>
       <div class="category">
-        <h2>Populares</h2>
-        <MovieSwiper :items="popularMovies" title="Populares" />
+        <MovieSwiper :items="popularMovies" title="Populares" :isSerie="false" />
       </div>
       <div class="category">
-        <h2>Recomendado</h2>
-        <MovieSwiper :items="recommendedMovies" title="Recomendado" />
+        <MovieSwiper :items="recommendedMovies" title="Recomendado" :isSerie="false" />
       </div>
     </div>
   </div>
@@ -24,9 +21,8 @@ import { ref, onMounted } from 'vue'
 import { useMovieStore } from '@/store/movies'
 import { useGenreStore } from '@/store/genres'
 import type { Movie } from '@/types/movie'
-import type { Genre } from '@/types/genres' // Define el tipo Genre
+import type { Genre } from '@/types/genres'
 
-// Importa MovieSwiper
 import MovieSwiper from '@/components/MovieSwiper.vue'
 
 const movieStore = useMovieStore()
@@ -41,14 +37,13 @@ const recommendedMovies = ref<Movie[]>([])
 
 onMounted(async () => {
   await genreStore.fetchGenres()
-  await movieStore.fetchMovies(10) // Ajusta el número de páginas que deseas obtener para más variedad
+  await movieStore.fetchMovies(10)
   genres.value = genreStore.genres
   movies.value = movieStore.movies
 
-  // Simular propiedades y categorizar películas (ajusta las condiciones según tu lógica)
-  mostViewedMovies.value = movieStore.movies.slice(0, 12) // Asegúrate de que haya suficientes películas
-  popularMovies.value = movieStore.movies.slice(12, 24) // Asegúrate de que haya suficientes películas
-  recommendedMovies.value = movieStore.movies.slice(24, 36) // Asegúrate de que haya suficientes películas
+  mostViewedMovies.value = movieStore.movies.slice(0, 12)
+  popularMovies.value = movieStore.movies.slice(12, 24)
+  recommendedMovies.value = movieStore.movies.slice(24, 36)
 
   loading.value = false
 })
@@ -56,7 +51,7 @@ onMounted(async () => {
 
 <style scoped>
 .movie-list {
-  margin-top: 80px; /* Ajusta este valor si el navbar es más alto */
+  margin-top: 80px;
   color: white;
 }
 
