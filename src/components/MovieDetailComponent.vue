@@ -20,6 +20,17 @@
           <p class="rating"><span>Rating: </span>{{ movie.vote_average }}/10</p>
         </div>
       </div>
+      <div class="recommendations" v-if="recommendations.length">
+        <h2>Recommended Movies</h2>
+        <ul>
+          <li v-for="recommendation in recommendations" :key="recommendation.id">
+            <router-link :to="{ name: 'movieDetail', params: { id: recommendation.id }}">
+              <img :src="'https://image.tmdb.org/t/p/w200' + recommendation.poster_path" :alt="recommendation.title" />
+              <p class="title">{{ recommendation.title }}</p>
+            </router-link>
+          </li>
+        </ul>
+      </div>
     </div>
     <div v-else>
       <p>Loading...</p>
@@ -34,6 +45,7 @@ import { useMovieStore } from '@/store/movies'
 import { useGenreStore } from '@/store/genres'
 import type { Movie } from '@/types/movie'
 import type { Genre } from '@/types/genres'
+import type { Recommendation } from '@/types/recommendation' // Importar el nuevo tipo
 
 const route = useRoute()
 const router = useRouter()
@@ -41,26 +53,34 @@ const movieStore = useMovieStore()
 const genreStore = useGenreStore()
 const movie = ref<Movie | null>(null)
 const genres = ref<Genre[]>([])
+const recommendations = ref<Recommendation[]>([]) // Definir la variable de recomendaciones
 
 const goBack = () => {
   router.back()
 }
 
-onMounted(async () => {
+const fetchMovieDetails = async (movieId: number) => {
+  await genreStore.fetchGenres() // Fetch genres here
+  await movieStore.fetchMovieDetail(movieId)
+  movie.value = movieStore.movieDetail
+  if (movie.value && movie.value.genre_ids) {
+    genres.value = genreStore.genres.filter(genre => movie.value?.genre_ids?.includes(genre.id))
+  }
+  // Fetch recommendations
+  await movieStore.fetchRecommendations(movieId)
+  recommendations.value = movieStore.recommendations
+}
+
+onMounted(() => {
   const movieId = route.params.id
   if (movieId) {
-    await genreStore.fetchGenres() // Fetch genres here
-    await movieStore.fetchMovieDetail(Number(movieId))
-    movie.value = movieStore.movieDetail
-    if (movie.value && movie.value.genre_ids) {
-      genres.value = genreStore.genres.filter(genre => movie.value?.genre_ids?.includes(genre.id))
-    }
+    fetchMovieDetails(Number(movieId))
   }
 })
 
-watch([movie, genreStore.genres], () => {
-  if (movie.value && genreStore.genres.length && movie.value.genre_ids) {
-    genres.value = genreStore.genres.filter(genre => movie.value?.genre_ids?.includes(genre.id))
+watch(() => route.params.id, (newId) => {
+  if (newId) {
+    fetchMovieDetails(Number(newId))
   }
 })
 
@@ -146,6 +166,47 @@ h1 {
   font-weight: bold;
 }
 
+.recommendations {
+  margin-top: 40px;
+  text-align: center;
+}
+
+.recommendations ul {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.recommendations li {
+  margin: 10px;
+  text-align: center;
+  position: relative; /* Añadir posición relativa */
+}
+
+.recommendations img {
+  width: 100px;
+  height: 150px;
+  object-fit: cover;
+}
+
+.recommendations .title {
+  display: none; /* Ocultar el título por defecto */
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: rgba(0, 0, 0, 0.7); /* Fondo oscuro con algo de transparencia */
+  color: white;
+  padding: 5px;
+  border-radius: 5px;
+}
+
+.recommendations li:hover .title {
+  display: block; /* Mostrar el título al pasar el ratón por encima */
+}
+
 .back-button {
   align-self: flex-start;
   margin-bottom: 20px;
@@ -160,5 +221,10 @@ h1 {
 
 .back-button:hover {
   background-color: #555;
+}
+
+.recommendations a {
+  text-decoration: none;
+  color: inherit;
 }
 </style>

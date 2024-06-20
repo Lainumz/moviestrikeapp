@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia'
 import axios from 'axios'
 import type { Series } from '@/types/series'
+import type { Recommendation } from '@/types/recommendation'
 
 const apiKey = process.env.VUE_APP_TMDB_API_KEY
 const apiUrl = 'https://api.themoviedb.org/3'
@@ -8,7 +9,8 @@ const apiUrl = 'https://api.themoviedb.org/3'
 export const useSeriesStore = defineStore('seriesStore', {
   state: () => ({
     series: [] as Series[],
-    seriesDetail: null as Series | null
+    seriesDetail: null as Series | null,
+    recommendations: [] as Recommendation[] // Añadir recomendaciones
   }),
   actions: {
     async fetchSeries (pages: number) {
@@ -39,6 +41,16 @@ export const useSeriesStore = defineStore('seriesStore', {
         this.seriesDetail = response.data
       } catch (error) {
         console.error('Error fetching series detail:', error)
+      }
+    },
+    async fetchRecommendations (id: number) {
+      try {
+        const response = await axios.get(`${apiUrl}/tv/${id}/recommendations`, {
+          params: { api_key: apiKey }
+        })
+        this.recommendations = response.data.results
+      } catch (error) {
+        console.error('Error fetching recommendations:', error)
       }
     },
     getSeriesByGenre (genreId: number) {

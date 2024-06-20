@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia'
 import axios from 'axios'
 import type { Movie } from '@/types/movie'
+import type { Recommendation } from '@/types/recommendation'
 
 const apiKey = process.env.VUE_APP_TMDB_API_KEY
 const apiUrl = 'https://api.themoviedb.org/3'
@@ -10,7 +11,8 @@ export const useMovieStore = defineStore('movieStore', {
     movies: [] as Movie[],
     movieDetail: null as Movie | null,
     searchResults: [] as Movie[],
-    newReleases: [] as Movie[]
+    newReleases: [] as Movie[],
+    recommendations: [] as Recommendation[] // Añadimos las recomendaciones aquí
   }),
   actions: {
     async fetchMovies (pages: number) {
@@ -55,6 +57,16 @@ export const useMovieStore = defineStore('movieStore', {
         this.newReleases = response.data.results.slice(0, 10)
       } catch (error) {
         console.error('Error fetching new releases:', error)
+      }
+    },
+    async fetchRecommendations (id: number) {
+      try {
+        const response = await axios.get(`${apiUrl}/movie/${id}/recommendations`, {
+          params: { api_key: apiKey }
+        })
+        this.recommendations = response.data.results
+      } catch (error) {
+        console.error('Error fetching recommendations:', error)
       }
     },
     getMoviesByGenre (genreId: number) {
