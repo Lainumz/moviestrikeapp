@@ -20,6 +20,17 @@
           <p class="rating"><span>Rating: </span>{{ series.vote_average }}/10</p>
         </div>
       </div>
+      <div class="recommendations" v-if="recommendations.length">
+        <h2>Recommended Series</h2>
+        <ul>
+          <li v-for="recommendation in recommendations" :key="recommendation.id">
+            <router-link :to="{ name: 'seriesDetail', params: { id: recommendation.id }}">
+              <img :src="'https://image.tmdb.org/t/p/w200' + recommendation.poster_path" :alt="recommendation.title" />
+              <p class="title">{{ recommendation.title }}</p>
+            </router-link>
+          </li>
+        </ul>
+      </div>
     </div>
     <div v-else>
       <p>Loading...</p>
@@ -34,6 +45,7 @@ import { useSeriesStore } from '@/store/series'
 import { useGenreStore } from '@/store/genres'
 import type { Series } from '@/types/series'
 import type { Genre } from '@/types/genres'
+import type { Recommendation } from '@/types/recommendation'
 
 const route = useRoute()
 const router = useRouter()
@@ -41,23 +53,33 @@ const seriesStore = useSeriesStore()
 const genreStore = useGenreStore()
 const series = ref<Series | null>(null)
 const genres = ref<Genre[]>([])
+const recommendations = ref<Recommendation[]>([])
 
 const goBack = () => {
   router.back()
 }
 
-onMounted(async () => {
+const fetchSeriesDetails = async (seriesId: number) => {
+  await seriesStore.fetchSeriesDetail(seriesId)
+  series.value = seriesStore.seriesDetail
+  await genreStore.fetchSeriesGenres()
+  if (series.value && series.value.genre_ids) {
+    genres.value = genreStore.genres.filter(genre => series.value?.genre_ids?.includes(genre.id))
+  }
+  await seriesStore.fetchRecommendations(seriesId)
+  recommendations.value = seriesStore.recommendations
+}
+
+onMounted(() => {
   const seriesId = route.params.id
   if (seriesId) {
-    await seriesStore.fetchSeriesDetail(Number(seriesId))
-    series.value = seriesStore.seriesDetail
-    await genreStore.fetchSeriesGenres() // Fetch series genres here
+    fetchSeriesDetails(Number(seriesId))
   }
 })
 
-watch([series, genreStore.genres], () => {
-  if (series.value && genreStore.genres.length) {
-    genres.value = genreStore.genres.filter(genre => series.value?.genre_ids?.includes(genre.id))
+watch(() => route.params.id, (newId) => {
+  if (newId) {
+    fetchSeriesDetails(Number(newId))
   }
 })
 
@@ -66,7 +88,7 @@ const backgroundStyle = computed(() => (
     ? {
         backgroundImage: `url('https://image.tmdb.org/t/p/w500${series.value.poster_path}')`,
         backgroundSize: 'cover',
-        backgroundPosition: 'center', // Centrar la imagen
+        backgroundPosition: 'center',
         backgroundRepeat: 'no-repeat'
       }
     : {}
@@ -78,7 +100,7 @@ const backgroundStyle = computed(() => (
   position: relative;
   width: 100%;
   min-height: 100vh;
-  background-attachment: fixed; /* Fijar el fondo para que se vea mejor al hacer scroll */
+  background-attachment: fixed;
 }
 
 .background-wrapper::before {
@@ -88,26 +110,26 @@ const backgroundStyle = computed(() => (
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.7); /* Ajustar el valor de opacidad para más o menos contraste */
+  background-color: rgba(0, 0, 0, 0.7);
   z-index: 1;
 }
 
 .series-detail {
-  margin: 0; /* Eliminar el margen */
-  padding: 20px; /* Ajustar el padding si es necesario */
+  margin: 0;
+  padding: 20px;
   color: white;
   display: flex;
   flex-direction: column;
   align-items: center;
   position: relative;
-  z-index: 2; /* Asegurar que el contenido esté por encima del overlay */
+  z-index: 2;
 }
 
 .content {
   display: flex;
   width: 100%;
   justify-content: center;
-  z-index: 2; /* Asegurar que el contenido esté por encima del overlay */
+  z-index: 2;
 }
 
 .poster {
@@ -143,6 +165,47 @@ h1 {
   font-weight: bold;
 }
 
+.recommendations {
+  margin-top: 40px;
+  text-align: center;
+}
+
+.recommendations ul {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.recommendations li {
+  margin: 10px;
+  text-align: center;
+  position: relative;
+}
+
+.recommendations img {
+  width: 100px;
+  height: 150px;
+  object-fit: cover;
+}
+
+.recommendations .title {
+  display: none;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: rgba(0, 0, 0, 0.7);
+  color: white;
+  padding: 5px;
+  border-radius: 5px;
+}
+
+.recommendations li:hover .title {
+  display: block;
+}
+
 .back-button {
   align-self: flex-start;
   margin-bottom: 20px;
@@ -152,10 +215,15 @@ h1 {
   background-color: #444;
   color: white;
   cursor: pointer;
-  z-index: 2; /* Asegurar que el botón esté por encima del overlay */
+  z-index: 2;
 }
 
 .back-button:hover {
   background-color: #555;
+}
+
+.recommendations a {
+  text-decoration: none;
+  color: inherit;
 }
 </style>
