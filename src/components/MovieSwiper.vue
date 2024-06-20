@@ -1,19 +1,30 @@
 <template>
-  <div class="carousel">
+  <div class="carousel" :class="{ 'featured-carousel': featured }">
     <h3>{{ title }}</h3>
     <div class="carousel-container">
-      <button @click="prevSlide" class="nav prev">‹</button>
+      <button v-if="!featured" @click="prevSlide" class="nav prev">‹</button>
       <div class="carousel-wrapper" :style="wrapperStyle">
-        <div v-for="movie in items" :key="movie.id" class="carousel-slide">
+        <div v-for="movie in items" :key="movie.id" class="carousel-slide" :class="{ 'featured-slide': featured }">
           <router-link :to="getDetailRoute(movie)" class="movie-link">
-            <div class="tooltip">
+            <div v-if="featured" class="flip-card">
+              <div class="flip-card-inner">
+                <div class="flip-card-front">
+                  <img :src="'https://image.tmdb.org/t/p/w500' + movie.poster_path" :alt="movie.title" />
+                </div>
+                <div class="flip-card-back">
+                  <h4>{{ movie.title }}</h4>
+                  <p>{{ movie.overview }}</p>
+                </div>
+              </div>
+            </div>
+            <div v-else class="tooltip">
               <img :src="'https://image.tmdb.org/t/p/w500' + movie.poster_path" :alt="movie.title" />
               <span class="tooltiptext">{{ movie.title }}</span>
             </div>
           </router-link>
         </div>
       </div>
-      <button @click="nextSlide" class="nav next">›</button>
+      <button v-if="!featured" @click="nextSlide" class="nav next">›</button>
     </div>
   </div>
 </template>
@@ -25,27 +36,28 @@ import type { Movie } from '@/types/movie'
 const props = defineProps<{
   items: Movie[],
   title: string,
-  isSerie: boolean
+  isSerie: boolean,
+  featured: boolean
 }>()
 
 const currentIndex = ref(0)
 
 const totalSlides = computed(() => props.items.length)
-const slidesToShow = 10 // Número de diapositivas visibles
+const slidesToShow = computed(() => (props.featured ? 5 : 10))
 
 const wrapperStyle = computed(() => ({
-  transform: `translateX(-${currentIndex.value * (100 / slidesToShow)}%)`,
-  width: `${(totalSlides.value / slidesToShow) * 100}%`
+  transform: props.featured ? 'none' : `translateX(-${currentIndex.value * (100 / slidesToShow.value)}%)`,
+  width: props.featured ? '100%' : `${(totalSlides.value / slidesToShow.value) * 100}%`
 }))
 
 const nextSlide = () => {
-  if (currentIndex.value < totalSlides.value - slidesToShow) {
+  if (!props.featured && currentIndex.value < totalSlides.value - slidesToShow.value) {
     currentIndex.value++
   }
 }
 
 const prevSlide = () => {
-  if (currentIndex.value > 0) {
+  if (!props.featured && currentIndex.value > 0) {
     currentIndex.value--
   }
 }
@@ -61,6 +73,10 @@ const getDetailRoute = (movie: Movie) => {
   color: white;
 }
 
+.featured-carousel {
+  margin-bottom: 40px;
+}
+
 .carousel-container {
   position: relative;
   overflow: hidden;
@@ -73,9 +89,17 @@ const getDetailRoute = (movie: Movie) => {
 }
 
 .carousel-slide {
-  flex: 0 0 calc(100% / 10); /* Ajusta este valor basado en slidesToShow */
+  flex: 0 0 calc(100% / 10); /* Ajustado según slidesToShow */
   box-sizing: border-box;
-  margin: 0 1px; /* Reducir el espacio entre las diapositivas */
+  margin: 0 1px; /* Reducido espacio entre diapositivas */
+}
+
+.featured-slide {
+  flex: 0 0 calc(100% / 5); /* Mostrar 5 diapositivas a la vez */
+  display: flex;
+  align-items: center;
+  justify-content: center; /* Alinear al centro */
+  margin: 0; /* Eliminar margen extra */
 }
 
 .carousel-slide img {
@@ -83,6 +107,10 @@ const getDetailRoute = (movie: Movie) => {
   height: auto; /* Mantener la proporción de las imágenes */
   transition: transform 0.2s ease-in-out;
   cursor: pointer;
+}
+
+.featured-slide img {
+  width: 200px; /* Ajustar el tamaño de la imagen para la película destacada */
 }
 
 .carousel-slide img:hover {
@@ -96,7 +124,7 @@ const getDetailRoute = (movie: Movie) => {
 
 .tooltiptext {
   visibility: hidden;
-  width: 150px; /* Ajustar el tamaño del tooltip según el tamaño de la imagen */
+  width: 150px; /* Ajustar el tamaño del tooltip */
   background-color: rgba(0, 0, 0, 0.8);
   color: #fff;
   text-align: center;
@@ -133,6 +161,10 @@ const getDetailRoute = (movie: Movie) => {
   color: white;
 }
 
+.movie-description {
+  margin-top: 10px;
+}
+
 .nav {
   position: absolute;
   top: 50%;
@@ -152,4 +184,59 @@ const getDetailRoute = (movie: Movie) => {
 .nav.next {
   right: 10px;
 }
+
+/* Estilos de la tarjeta giratoria */
+.flip-card {
+  background-color: transparent;
+  width: 200px; /* Mantener el tamaño de la tarjeta */
+  height: 300px;
+  perspective: 1000px;
+  margin-right: 10px; /* Reducir el espacio entre tarjetas */
+}
+
+.flip-card-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  transition: transform 0.6s;
+  transform-style: preserve-3d;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+}
+
+.flip-card:hover .flip-card-inner {
+  transform: rotateY(180deg);
+}
+
+.flip-card-front, .flip-card-back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  border-radius: 10px;
+}
+
+.flip-card-front {
+  background-color: #bbb;
+  color: black;
+}
+
+.flip-card-back {
+  background-color: #333;
+  color: white;
+  transform: rotateY(180deg);
+  padding: 20px;
+  box-sizing: border-box;
+  text-align: left;
+}
+
+.flip-card-back h4 {
+  margin-top: 0;
+}
+
+.flip-card-back p {
+  font-size: 14px;
+  line-height: 1.5;
+}
+
 </style>

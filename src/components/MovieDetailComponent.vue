@@ -49,14 +49,17 @@ const goBack = () => {
 onMounted(async () => {
   const movieId = route.params.id
   if (movieId) {
+    await genreStore.fetchGenres() // Fetch genres here
     await movieStore.fetchMovieDetail(Number(movieId))
     movie.value = movieStore.movieDetail
-    await genreStore.fetchGenres() // Fetch genres here
+    if (movie.value && movie.value.genre_ids) {
+      genres.value = genreStore.genres.filter(genre => movie.value?.genre_ids?.includes(genre.id))
+    }
   }
 })
 
 watch([movie, genreStore.genres], () => {
-  if (movie.value && genreStore.genres.length) {
+  if (movie.value && genreStore.genres.length && movie.value.genre_ids) {
     genres.value = genreStore.genres.filter(genre => movie.value?.genre_ids?.includes(genre.id))
   }
 })

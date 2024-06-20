@@ -3,14 +3,15 @@
     <h1>Películas</h1>
     <div v-if="loading">Loading movies and genres...</div>
     <div v-else>
+      <MovieSwiper :items="featuredMovies" title="Película Destacada" :isSerie="false" :featured="true" />
       <div class="category">
-        <MovieSwiper :items="mostViewedMovies" title="Más Visto" :isSerie="false" />
+        <MovieSwiper :items="mostViewedMovies" title="Más Visto" :isSerie="false" :featured="false" />
       </div>
       <div class="category">
-        <MovieSwiper :items="popularMovies" title="Populares" :isSerie="false" />
+        <MovieSwiper :items="popularMovies" title="Populares" :isSerie="false" :featured="false" />
       </div>
       <div class="category">
-        <MovieSwiper :items="recommendedMovies" title="Recomendado" :isSerie="false" />
+        <MovieSwiper :items="recommendedMovies" title="Recomendado" :isSerie="false" :featured="false" />
       </div>
     </div>
   </div>
@@ -31,6 +32,7 @@ const movies = ref<Movie[]>([])
 const genres = ref<Genre[]>([])
 const loading = ref(true)
 
+const featuredMovies = ref<Movie[]>([])
 const mostViewedMovies = ref<Movie[]>([])
 const popularMovies = ref<Movie[]>([])
 const recommendedMovies = ref<Movie[]>([])
@@ -41,9 +43,10 @@ onMounted(async () => {
   genres.value = genreStore.genres
   movies.value = movieStore.movies
 
-  mostViewedMovies.value = movieStore.movies.slice(0, 12)
-  popularMovies.value = movieStore.movies.slice(12, 24)
-  recommendedMovies.value = movieStore.movies.slice(24, 36)
+  featuredMovies.value = movieStore.movies.slice(0, 5)
+  mostViewedMovies.value = movieStore.movies.slice(5, 17)
+  popularMovies.value = movieStore.movies.slice(17, 29)
+  recommendedMovies.value = movieStore.movies.slice(29, 41)
 
   loading.value = false
 })
