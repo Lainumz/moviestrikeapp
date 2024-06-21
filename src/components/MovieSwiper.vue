@@ -2,7 +2,7 @@
   <div class="carousel" :class="{ 'featured-carousel': featured }">
     <h3>{{ title }}</h3>
     <div class="carousel-container">
-      <button v-if="!featured" @click="prevSlide" class="nav prev">‹</button>
+      <button v-if="!featured && currentIndex > 0" @click="prevSlide" class="nav prev">‹</button>
       <div class="carousel-wrapper" :style="wrapperStyle">
         <div v-for="movie in items" :key="movie.id" class="carousel-slide" :class="{ 'featured-slide': featured }">
           <router-link :to="getDetailRoute(movie)" class="movie-link">
@@ -24,7 +24,7 @@
           </router-link>
         </div>
       </div>
-      <button v-if="!featured" @click="nextSlide" class="nav next">›</button>
+      <button v-if="!featured && currentIndex < maxIndex" @click="nextSlide" class="nav next">›</button>
     </div>
   </div>
 </template>
@@ -43,7 +43,8 @@ const props = defineProps<{
 const currentIndex = ref(0)
 
 const totalSlides = computed(() => props.items.length)
-const slidesToShow = computed(() => (props.featured ? 5 : 10))
+const slidesToShow = computed(() => (props.featured ? 8 : 9.65))
+const maxIndex = computed(() => totalSlides.value - slidesToShow.value > 0 ? totalSlides.value - slidesToShow.value : 0)
 
 const wrapperStyle = computed(() => ({
   transform: props.featured ? 'none' : `translateX(-${currentIndex.value * (100 / slidesToShow.value)}%)`,
@@ -51,7 +52,7 @@ const wrapperStyle = computed(() => ({
 }))
 
 const nextSlide = () => {
-  if (!props.featured && currentIndex.value < totalSlides.value - slidesToShow.value) {
+  if (!props.featured && currentIndex.value < maxIndex.value) {
     currentIndex.value++
   }
 }
@@ -238,5 +239,4 @@ const getDetailRoute = (movie: Movie) => {
   font-size: 14px;
   line-height: 1.5;
 }
-
 </style>
