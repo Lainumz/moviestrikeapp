@@ -20,13 +20,24 @@
           <p class="rating"><span>Rating: </span>{{ series.vote_average }}/10</p>
         </div>
       </div>
+      <div class="trailers" v-if="trailers.length">
+        <h2>Trailer</h2>
+        <div v-for="trailer in trailers" :key="trailer.id" class="trailer">
+          <iframe
+            :src="'https://www.youtube.com/embed/' + trailer.key"
+            frameborder="0"
+            allowfullscreen
+          ></iframe>
+          <p>{{ trailer.name }}</p>
+        </div>
+      </div>
       <div class="recommendations" v-if="recommendations.length">
         <h2>Recommended Series</h2>
         <ul>
           <li v-for="recommendation in recommendations" :key="recommendation.id">
             <router-link :to="{ name: 'seriesDetail', params: { id: recommendation.id }}">
-              <img :src="'https://image.tmdb.org/t/p/w200' + recommendation.poster_path" :alt="recommendation.title" />
-              <p class="title">{{ recommendation.title }}</p>
+              <img :src="'https://image.tmdb.org/t/p/w200' + recommendation.poster_path" :alt="recommendation.title || recommendation.title" />
+              <p class="title">{{ recommendation.title || recommendation.title }}</p>
             </router-link>
           </li>
         </ul>
@@ -46,6 +57,7 @@ import { useGenreStore } from '@/store/genres'
 import type { Series } from '@/types/series'
 import type { Genre } from '@/types/genres'
 import type { Recommendation } from '@/types/recommendation'
+import type { Trailer } from '@/types/trailer' // Importar el nuevo tipo
 
 const route = useRoute()
 const router = useRouter()
@@ -54,6 +66,7 @@ const genreStore = useGenreStore()
 const series = ref<Series | null>(null)
 const genres = ref<Genre[]>([])
 const recommendations = ref<Recommendation[]>([])
+const trailers = ref<Trailer[]>([]) // Definir la variable de trailers
 
 const goBack = () => {
   router.back()
@@ -68,6 +81,8 @@ const fetchSeriesDetails = async (seriesId: number) => {
   }
   await seriesStore.fetchRecommendations(seriesId)
   recommendations.value = seriesStore.recommendations
+  await seriesStore.fetchTrailers(seriesId) // Obtener trailers
+  trailers.value = seriesStore.trailers
 }
 
 onMounted(() => {
@@ -163,6 +178,20 @@ h1 {
 .rating {
   margin-top: 10px;
   font-weight: bold;
+}
+
+.trailers {
+  margin-top: 40px;
+  text-align: center;
+}
+
+.trailers .trailer {
+  margin-bottom: 20px;
+}
+
+.trailers iframe {
+  width: 100%;
+  height: 300px; /* Ajustar la altura para mantener la relación de aspecto 16:9 */
 }
 
 .recommendations {

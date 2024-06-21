@@ -16,6 +16,7 @@ export const useGenreStore = defineStore('genreStore', {
           params: { api_key: apiKey }
         })
         this.genres = response.data.genres
+        console.log('Genres fetched:', this.genres) // Para verificar que los géneros se obtienen correctamente
       } catch (error) {
         console.error('Error fetching genres:', error)
       }
@@ -26,6 +27,7 @@ export const useGenreStore = defineStore('genreStore', {
           params: { api_key: apiKey }
         })
         this.genres = response.data.genres
+        console.log('Series genres fetched:', this.genres) // Para verificar que los géneros de series se obtienen correctamente
       } catch (error) {
         console.error('Error fetching series genres:', error)
       }

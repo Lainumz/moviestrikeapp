@@ -2,6 +2,7 @@ import { defineStore } from 'pinia'
 import axios from 'axios'
 import type { Movie } from '@/types/movie'
 import type { Recommendation } from '@/types/recommendation'
+import type { Trailer } from '@/types/trailer' // Importar el nuevo tipo
 
 const apiKey = process.env.VUE_APP_TMDB_API_KEY
 const apiUrl = 'https://api.themoviedb.org/3'
@@ -12,7 +13,8 @@ export const useMovieStore = defineStore('movieStore', {
     movieDetail: null as Movie | null,
     searchResults: [] as Movie[],
     newReleases: [] as Movie[],
-    recommendations: [] as Recommendation[] // Añadimos las recomendaciones aquí
+    recommendations: [] as Recommendation[], // Añadimos las recomendaciones aquí
+    trailers: [] as Trailer[] // Añadimos los trailers aquí
   }),
   actions: {
     async fetchMovies (pages: number) {
@@ -67,6 +69,17 @@ export const useMovieStore = defineStore('movieStore', {
         this.recommendations = response.data.results
       } catch (error) {
         console.error('Error fetching recommendations:', error)
+      }
+    },
+    async fetchTrailers (id: number) { // Nueva acción para obtener trailers
+      try {
+        const response = await axios.get(`${apiUrl}/movie/${id}/videos`, {
+          params: { api_key: apiKey }
+        })
+        const trailers = response.data.results.filter((video: Trailer) => video.type === 'Trailer')
+        this.trailers = trailers.slice(0, 1) // Guardar solo el primer trailer
+      } catch (error) {
+        console.error('Error fetching trailers:', error)
       }
     },
     getMoviesByGenre (genreId: number) {
