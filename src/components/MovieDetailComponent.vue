@@ -20,6 +20,17 @@
           <p class="rating"><span>Rating: </span>{{ movie.vote_average }}/10</p>
         </div>
       </div>
+      <div class="trailers" v-if="trailers.length">
+        <h2>Trailer</h2>
+        <div v-for="trailer in trailers" :key="trailer.id" class="trailer">
+          <iframe
+            :src="'https://www.youtube.com/embed/' + trailer.key"
+            frameborder="0"
+            allowfullscreen
+          ></iframe>
+          <p>{{ trailer.name }}</p>
+        </div>
+      </div>
       <div class="recommendations" v-if="recommendations.length">
         <h2>Recommended Movies</h2>
         <ul>
@@ -45,7 +56,8 @@ import { useMovieStore } from '@/store/movies'
 import { useGenreStore } from '@/store/genres'
 import type { Movie } from '@/types/movie'
 import type { Genre } from '@/types/genres'
-import type { Recommendation } from '@/types/recommendation' // Importar el nuevo tipo
+import type { Recommendation } from '@/types/recommendation'
+import type { Trailer } from '@/types/trailer' // Importar el nuevo tipo
 
 const route = useRoute()
 const router = useRouter()
@@ -53,22 +65,24 @@ const movieStore = useMovieStore()
 const genreStore = useGenreStore()
 const movie = ref<Movie | null>(null)
 const genres = ref<Genre[]>([])
-const recommendations = ref<Recommendation[]>([]) // Definir la variable de recomendaciones
+const recommendations = ref<Recommendation[]>([])
+const trailers = ref<Trailer[]>([]) // Definir la variable de trailers
 
 const goBack = () => {
   router.back()
 }
 
 const fetchMovieDetails = async (movieId: number) => {
-  await genreStore.fetchGenres() // Fetch genres here
+  await genreStore.fetchGenres()
   await movieStore.fetchMovieDetail(movieId)
   movie.value = movieStore.movieDetail
   if (movie.value && movie.value.genre_ids) {
     genres.value = genreStore.genres.filter(genre => movie.value?.genre_ids?.includes(genre.id))
   }
-  // Fetch recommendations
   await movieStore.fetchRecommendations(movieId)
   recommendations.value = movieStore.recommendations
+  await movieStore.fetchTrailers(movieId) // Obtener trailers
+  trailers.value = movieStore.trailers
 }
 
 onMounted(() => {
@@ -89,7 +103,7 @@ const backgroundStyle = computed(() => (
     ? {
         backgroundImage: `url('https://image.tmdb.org/t/p/w500${movie.value.poster_path}')`,
         backgroundSize: 'cover',
-        backgroundPosition: 'center', // Centrar la imagen
+        backgroundPosition: 'center',
         backgroundRepeat: 'no-repeat'
       }
     : {}
@@ -101,7 +115,7 @@ const backgroundStyle = computed(() => (
   position: relative;
   width: 100%;
   min-height: 100vh;
-  background-attachment: fixed; /* Fijar el fondo para que se vea mejor al hacer scroll */
+  background-attachment: fixed;
 }
 
 .background-wrapper::before {
@@ -111,26 +125,26 @@ const backgroundStyle = computed(() => (
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.7); /* Ajustar el valor de opacidad para más o menos contraste */
+  background-color: rgba(0, 0, 0, 0.7);
   z-index: 1;
 }
 
 .movie-detail {
-  margin: 0; /* Eliminar el margen */
-  padding: 20px; /* Ajustar el padding si es necesario */
+  margin: 0;
+  padding: 20px;
   color: white;
   display: flex;
   flex-direction: column;
   align-items: center;
   position: relative;
-  z-index: 2; /* Asegurar que el contenido esté por encima del overlay */
+  z-index: 2;
 }
 
 .content {
   display: flex;
   width: 100%;
   justify-content: center;
-  z-index: 2; /* Asegurar que el contenido esté por encima del overlay */
+  z-index: 2;
 }
 
 .poster {
@@ -166,6 +180,20 @@ h1 {
   font-weight: bold;
 }
 
+.trailers {
+  margin-top: 40px;
+  text-align: center;
+}
+
+.trailers .trailer {
+  margin-bottom: 20px;
+}
+
+.trailers iframe {
+  width: 100%;
+  height: 300px; /* Ajustar la altura para mantener la relación de aspecto 16:9 */
+}
+
 .recommendations {
   margin-top: 40px;
   text-align: center;
@@ -182,7 +210,7 @@ h1 {
 .recommendations li {
   margin: 10px;
   text-align: center;
-  position: relative; /* Añadir posición relativa */
+  position: relative;
 }
 
 .recommendations img {
@@ -192,19 +220,19 @@ h1 {
 }
 
 .recommendations .title {
-  display: none; /* Ocultar el título por defecto */
+  display: none;
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  background-color: rgba(0, 0, 0, 0.7); /* Fondo oscuro con algo de transparencia */
+  background-color: rgba(0, 0, 0, 0.7);
   color: white;
   padding: 5px;
   border-radius: 5px;
 }
 
 .recommendations li:hover .title {
-  display: block; /* Mostrar el título al pasar el ratón por encima */
+  display: block;
 }
 
 .back-button {
@@ -216,7 +244,7 @@ h1 {
   background-color: #444;
   color: white;
   cursor: pointer;
-  z-index: 2; /* Asegurar que el botón esté por encima del overlay */
+  z-index: 2;
 }
 
 .back-button:hover {
