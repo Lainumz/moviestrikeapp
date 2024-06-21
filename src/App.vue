@@ -4,11 +4,13 @@
     <div class="content">
       <router-view />
     </div>
+    <AppFooter />
   </div>
 </template>
 
 <script setup lang="ts">
 import AppNavbar from './components/AppNavbar.vue'
+import AppFooter from './components/AppFooter.vue'
 </script>
 
 <style>
@@ -33,5 +35,6 @@ html, body, #app {
 .content {
   flex: 1;
   margin-top: 80px; /* Ajusta este valor si el navbar es más alto */
+  padding-bottom: 60px; /* Espacio para el footer */
 }
 </style>
