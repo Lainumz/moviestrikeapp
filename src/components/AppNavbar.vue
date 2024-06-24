@@ -16,6 +16,7 @@
 </template>
 
 <script setup lang="ts">
+import '../assets/styles/AppNavbar.css'
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 
@@ -30,55 +31,5 @@ const searchMovies = () => {
 </script>
 
 <style scoped>
-.navbar {
-  background-color: rgba(0, 0, 0, 0.95);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 1rem;
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  z-index: 1000;
-}
 
-.navbar-left {
-  display: flex;
-  align-items: center;
-}
-
-.navbar-center {
-  display: flex;
-  justify-content: center;
-  flex: 1;
-}
-
-.navbar-right {
-  display: flex;
-  align-items: center;
-  margin-right: 1rem; /* Agrega margen a la derecha */
-}
-
-.logo {
-  height: 60px; /* Aumenta la altura del logo */
-  margin-right: 1rem;
-}
-
-.navbar a {
-  color: white;
-  text-decoration: none;
-  margin: 0 1rem;
-}
-
-.navbar a:hover {
-  text-decoration: underline;
-}
-
-.navbar-right input {
-  padding: 0.5rem;
-  border: none;
-  border-radius: 5px;
-  margin-left: 1rem; /* Mueve el buscador un poco a la izquierda */
-}
 </style>

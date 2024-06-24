@@ -39,6 +39,7 @@ import { ref, computed, onMounted } from 'vue'
 import { useMovieStore } from '@/store/movies'
 import { useGenreStore } from '@/store/genres'
 import type { Movie } from '@/types/movie'
+import '../assets/styles/MoviesComponent.css'
 
 const movieStore = useMovieStore()
 const genreStore = useGenreStore()
@@ -89,103 +90,6 @@ onMounted(async () => {
 })
 </script>
 
-<style scoped>
-.movies {
-  margin-top: 80px; /* Ajusta este valor si el navbar es más alto */
-  color: white;
-}
+<style>
 
-.genre-select {
-  margin-bottom: 20px;
-}
-
-.genre-select label {
-  margin-right: 10px;
-  color: white;
-}
-
-.genre-select select {
-  padding: 5px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  background-color: #333;
-  color: white;
-}
-
-.genre-select select option {
-  background-color: #333;
-  color: white;
-}
-
-.movie {
-  display: inline-block;
-  margin: 10px;
-  text-align: center;
-  position: relative;
-}
-
-.movie img {
-  width: 200px;
-  height: 300px;
-  transition: transform 0.2s ease-in-out;
-  cursor: pointer;
-}
-
-.movie img:hover {
-  transform: scale(1.05);
-}
-
-.tooltip {
-  position: relative;
-  display: inline-block;
-}
-
-.tooltiptext {
-  visibility: hidden;
-  width: 200px;
-  background-color: rgba(0, 0, 0, 0.8);
-  color: #fff;
-  text-align: center;
-  border-radius: 5px;
-  padding: 5px 0;
-  position: absolute;
-  z-index: 1;
-  bottom: 105%; /* Posición encima de la imagen */
-  left: 50%;
-  margin-left: -100px; /* Centrar el tooltip */
-  opacity: 0;
-  transition: opacity 0.3s;
-}
-
-.tooltip:hover .tooltiptext {
-  visibility: visible;
-  opacity: 1;
-}
-
-.pagination {
-  margin-top: 20px;
-  text-align: center;
-}
-
-.pagination button {
-  padding: 10px 20px;
-  border: none;
-  border-radius: 5px;
-  background-color: #444;
-  color: white;
-  cursor: pointer;
-}
-
-.pagination button:hover {
-  background-color: #555;
-}
-
-.pagination span {
-  margin: 0 10px;
-  color: white;
-}
-
-h1 {
-  color: white;
-}
 </style>

@@ -25,6 +25,7 @@ import type { Movie } from '@/types/movie'
 import type { Genre } from '@/types/genres'
 
 import MovieSwiper from '@/components/MovieSwiper.vue'
+import '../assets/styles/MovieList.css'
 
 const movieStore = useMovieStore()
 const genreStore = useGenreStore()
@@ -52,17 +53,6 @@ onMounted(async () => {
 })
 </script>
 
-<style scoped>
-.movie-list {
-  margin-top: 80px;
-  color: white;
-}
+<style>
 
-.category {
-  margin-bottom: 40px;
-}
-
-h1, h2 {
-  color: white;
-}
 </style>
