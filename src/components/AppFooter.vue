@@ -16,58 +16,13 @@
   </template>
 
 <script>
+import '../assets/styles/AppFooter.css'
+
 export default {
   name: 'AppFooter'
 }
 </script>
 
   <style scoped>
-  html, body {
-    height: 100%;
-    margin: 0;
-  }
 
-  body {
-    display: flex;
-    flex-direction: column;
-  }
-
-  #app {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-  }
-
-  .footer {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 1rem;
-    background-color: black;
-    color: white;
-    border-top: 1px solid #e7e7e7;
-    height: 60px; /* Ajusta la altura del footer según sea necesario */
-  }
-
-  .footer-left,
-  .footer-center,
-  .footer-right {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-
-  .footer-linkedin {
-    width: 50px;
-    height: auto;
-  }
-
-  .footer-center p {
-    margin: 0;
-    text-align: center;
-  }
-
-  .footer-logo {
-    width: 80px;
-  }
   </style>

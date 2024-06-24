@@ -24,6 +24,7 @@
 import { ref, onMounted } from 'vue'
 import { useMovieStore } from '@/store/movies'
 import type { Movie } from '@/types/movie'
+import '../assets/styles/NewReleasesComponent.css'
 
 const movieStore = useMovieStore()
 const newReleases = ref<Movie[]>(movieStore.newReleases)
@@ -36,54 +37,6 @@ onMounted(async () => {
 })
 </script>
 
-<style scoped>
-.new-releases {
-  margin-top: 80px; /* Ajusta este valor si el navbar es más alto */
-  color: white;
-}
+<style>
 
-.movie {
-  display: inline-block;
-  margin: 10px;
-  text-align: center;
-  position: relative;
-}
-
-.movie img {
-  width: 200px;
-  height: 300px;
-  transition: transform 0.2s ease-in-out;
-  cursor: pointer;
-}
-
-.movie img:hover {
-  transform: scale(1.05);
-}
-
-.tooltip {
-  position: relative;
-  display: inline-block;
-}
-
-.tooltiptext {
-  visibility: hidden;
-  width: 200px;
-  background-color: rgba(0, 0, 0, 0.8);
-  color: #fff;
-  text-align: center;
-  border-radius: 5px;
-  padding: 5px 0;
-  position: absolute;
-  z-index: 1;
-  bottom: 105%; /* Posición encima de la imagen */
-  left: 50%;
-  margin-left: -100px; /* Centrar el tooltip */
-  opacity: 0;
-  transition: opacity 0.3s;
-}
-
-.tooltip:hover .tooltiptext {
-  visibility: visible;
-  opacity: 1;
-}
 </style>
