@@ -1,49 +1,59 @@
 <template>
-  <div class="new-releases">
-    <h1>New Releases</h1>
-    <div v-if="loading">Loading new releases...</div>
+  <div class="movie-list">
+    <h1>Películas</h1>
+    <div v-if="loading">Loading movies and genres...</div>
     <div v-else>
-      <div v-if="newReleases.length">
-        <div class="movies-grid">
-          <div v-for="movie in newReleases" :key="movie.id" class="movie">
-            <router-link :to="{ name: 'movieDetail', params: { id: movie.id } }">
-              <div class="flip-card">
-                <div class="flip-card-inner">
-                  <div class="flip-card-front">
-                    <img :src="'https://image.tmdb.org/t/p/w500' + movie.poster_path" :alt="movie.title" />
-                  </div>
-                  <div class="flip-card-back">
-                    <h3>{{ movie.title }}</h3>
-                    <p>{{ movie.overview }}</p>
-                  </div>
-                </div>
-              </div>
-            </router-link>
-          </div>
-        </div>
+      <MovieSwiper :items="featuredMovies" title="Película Destacada" :isSerie="false" :featured="true" />
+      <div class="category">
+        <MovieSwiper :items="mostViewedMovies" title="Más Visto" :isSerie="false" :featured="false" />
       </div>
-      <div v-else>
-        <p>No new releases available.</p>
+      <div class="category">
+        <MovieSwiper :items="popularMovies" title="Populares" :isSerie="false" :featured="false" />
+      </div>
+      <div class="category">
+        <MovieSwiper :items="recommendedMovies" title="Recomendado" :isSerie="false" :featured="false" />
       </div>
     </div>
+    <Chatbot />
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import { useMovieStore } from '@/store/movies'
+import { useGenreStore } from '@/store/genres'
 import type { Movie } from '@/types/movie'
-import '../assets/styles/NewReleasesComponent.css'
+import type { Genre } from '@/types/genres'
+
+import MovieSwiper from '@/components/MovieSwiper.vue'
+import '../assets/styles/MovieList.css'
 
 const movieStore = useMovieStore()
-const newReleases = ref<Movie[]>(movieStore.newReleases)
+const genreStore = useGenreStore()
+const movies = ref<Movie[]>([])
+const genres = ref<Genre[]>([])
 const loading = ref(true)
 
+const featuredMovies = ref<Movie[]>([])
+const mostViewedMovies = ref<Movie[]>([])
+const popularMovies = ref<Movie[]>([])
+const recommendedMovies = ref<Movie[]>([])
+
 onMounted(async () => {
-  await movieStore.fetchNewReleases() // Llamada sin argumentos
-  newReleases.value = movieStore.newReleases
+  await genreStore.fetchGenres()
+  await movieStore.fetchMovies(10)
+  genres.value = genreStore.genres
+  movies.value = movieStore.movies
+
+  featuredMovies.value = movieStore.movies.slice(0, 5)
+  mostViewedMovies.value = movieStore.movies.slice(5, 17)
+  popularMovies.value = movieStore.movies.slice(17, 29)
+  recommendedMovies.value = movieStore.movies.slice(29, 41)
+
   loading.value = false
 })
 </script>
 
-<style src="../assets/styles/NewReleasesComponent.css"></style>
+<style>
+/* Aquí puedes agregar los estilos específicos para tu componente Home si es necesario */
+</style>
