@@ -4,13 +4,22 @@
     <div v-if="loading">Loading new releases...</div>
     <div v-else>
       <div v-if="newReleases.length">
-        <div v-for="movie in newReleases" :key="movie.id" class="movie">
-          <router-link :to="{ name: 'movieDetail', params: { id: movie.id } }">
-            <div class="tooltip">
-              <img :src="'https://image.tmdb.org/t/p/w500' + movie.poster_path" :alt="movie.title" />
-              <span class="tooltiptext">{{ movie.title }}</span>
-            </div>
-          </router-link>
+        <div class="movies-grid">
+          <div v-for="movie in newReleases" :key="movie.id" class="movie">
+            <router-link :to="{ name: 'movieDetail', params: { id: movie.id } }">
+              <div class="flip-card">
+                <div class="flip-card-inner">
+                  <div class="flip-card-front">
+                    <img :src="'https://image.tmdb.org/t/p/w500' + movie.poster_path" :alt="movie.title" />
+                  </div>
+                  <div class="flip-card-back">
+                    <h3>{{ movie.title }}</h3>
+                    <p>{{ movie.overview }}</p>
+                  </div>
+                </div>
+              </div>
+            </router-link>
+          </div>
         </div>
       </div>
       <div v-else>
@@ -37,6 +46,4 @@ onMounted(async () => {
 })
 </script>
 
-<style>
-
-</style>
+<style src="../assets/styles/NewReleasesComponent.css"></style>
