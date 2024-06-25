@@ -44,22 +44,22 @@ const props = defineProps<{
 const currentIndex = ref(0)
 
 const totalSlides = computed(() => props.items.length)
-const slidesToShow = computed(() => (props.featured ? 8 : 9.65))
-const maxIndex = computed(() => totalSlides.value - slidesToShow.value > 0 ? totalSlides.value - slidesToShow.value : 0)
+const slidesToShow = computed(() => (props.featured ? 5 : 10)) // Aseguramos que sea consistente con el CSS
+const maxIndex = computed(() => totalSlides.value - slidesToShow.value)
 
 const wrapperStyle = computed(() => ({
-  transform: props.featured ? 'none' : `translateX(-${currentIndex.value * (100 / slidesToShow.value)}%)`,
-  width: props.featured ? '100%' : `${(totalSlides.value / slidesToShow.value) * 100}%`
+  transform: `translateX(-${currentIndex.value * (100 / slidesToShow.value)}%)`,
+  width: `${(totalSlides.value / slidesToShow.value) * 100}%`
 }))
 
 const nextSlide = () => {
-  if (!props.featured && currentIndex.value < maxIndex.value) {
+  if (currentIndex.value < maxIndex.value) {
     currentIndex.value++
   }
 }
 
 const prevSlide = () => {
-  if (!props.featured && currentIndex.value > 0) {
+  if (currentIndex.value > 0) {
     currentIndex.value--
   }
 }
@@ -68,7 +68,3 @@ const getDetailRoute = (movie: Movie) => {
   return props.isSerie ? `/serie/${movie.id}` : `/movie/${movie.id}`
 }
 </script>
-
-<style>
-
-</style>

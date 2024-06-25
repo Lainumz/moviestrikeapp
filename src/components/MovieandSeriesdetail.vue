@@ -17,7 +17,7 @@
             <span v-else>No genres available</span>
           </p>
           <p class="additional-info">
-            <span>{{ isMovie ? 'Release Date: ' : 'First Air Date: ' }}</span>{{ entityDate }}
+            <span>{{ isMovie ? 'Release Date: ' : 'Release Date: ' }}</span>{{ entityDate }}
           </p>
           <p class="rating"><span>Rating: </span>{{ entity.vote_average }}/10</p>
         </div>
