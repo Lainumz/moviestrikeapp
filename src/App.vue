@@ -18,7 +18,7 @@ html, body, #app {
   height: 100%;
   margin: 0;
   padding: 0px;
-  background-color: rgba(18, 17, 17, 0.95); /* Fondo con el color 121111 al 95% */
+  background-color: rgba(18, 17, 17, 1); /* Fondo con el color 121111 al 95% */
 }
 
 #app {

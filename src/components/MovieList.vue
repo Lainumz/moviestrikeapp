@@ -14,6 +14,7 @@
         <MovieSwiper :items="recommendedMovies" title="Recomendado" :isSerie="false" :featured="false" />
       </div>
     </div>
+    <Chatbot />
   </div>
 </template>
 
@@ -54,5 +55,5 @@ onMounted(async () => {
 </script>
 
 <style>
-
+/* Aquí puedes agregar los estilos específicos para tu componente Home si es necesario */
 </style>
