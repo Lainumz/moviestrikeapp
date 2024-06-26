@@ -3,7 +3,7 @@
     <div class="introduction">
       <img src="@/assets/logo.png" alt="TMDB Logo" class="logo"/>
       <h1>Bienvenido a Moviestrike Project</h1>
-      <p>Explora una vasta colección de películas proporcionadas por The Movie Database (TMDB). Disfruta de las películas más populares, las más vistas y nuestras recomendaciones personalizadas.</p>
+      <p>Explora una vasta colección de películas proporcionadas por The Movie Database (TMDB). Disfruta de las películas más populares, las más vistas y mis recomendaciones personalizadas.</p>
     </div>
     <div v-if="loading" class="loading">Loading movies and genres...</div>
     <div v-else>

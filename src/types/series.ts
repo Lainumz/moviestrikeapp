@@ -7,5 +7,7 @@ export interface Series {
     genre_ids: number[];
     first_air_date: string;
     vote_average: number;
+    original_language?: string; // Añadido
+    status?: string; // Añadido
   }
   /* eslint-enable camelcase */

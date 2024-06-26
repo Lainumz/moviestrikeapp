@@ -37,6 +37,7 @@
     height: 300px;
     transition: transform 0.2s ease-in-out;
     cursor: pointer;
+    border-radius: 5%;
   }
   
   .movie img:hover {
