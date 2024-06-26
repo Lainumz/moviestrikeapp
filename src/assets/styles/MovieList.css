@@ -1,12 +1,47 @@
 .movie-list {
-    margin-top: 80px;
-    color: white;
-  }
-  
-  .category {
-    margin-bottom: 40px;
-  }
-  
-  h1, h2 {
-    color: white;
-  }
+  font-family: Arial, sans-serif;
+  color: #333;
+}
+
+.introduction {
+  text-align: center;
+background-color: #00000081;
+  padding: 40px 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+}
+
+.introduction:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.logo {
+  margin-bottom: 20px;
+}
+
+.introduction h1 {
+  font-size: 2.5em;
+  margin-bottom: 20px;
+  color: white;
+}
+
+.introduction p {
+  font-size: 1.2em;
+  line-height: 1.6;
+  color: white;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.category {
+  margin: 40px 0;
+  text-align: center;
+}
+
+.loading {
+  text-align: center;
+  font-size: 1.5em;
+  color: #777;
+  padding: 20px;
+}
