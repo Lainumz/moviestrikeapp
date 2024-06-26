@@ -8,18 +8,17 @@
         </div>
         <div class="details">
           <h1>{{ entityTitle }}</h1>
-          <p class="overview">{{ entity.overview }}</p>
-          <p class="additional-info">
-            <span>Genres: </span>
-            <span v-if="genres.length">
-              <span v-for="(genre, index) in genres" :key="genre.id">{{ genre.name }}<span v-if="index < genres.length - 1">, </span></span>
-            </span>
-            <span v-else>No genres available</span>
-          </p>
-          <p class="additional-info">
-            <span>{{ isMovie ? 'Release Date: ' : 'Release Date: ' }}</span>{{ entityDate }}
-          </p>
-          <p class="rating"><span>Rating: </span>{{ entity.vote_average }}/10</p>
+          <p class="overview">{{ entity.overview || 'No description available.' }}</p>
+          <div class="additional-info">
+            <span>{{ isMovie ? 'Release Date: ' : 'First Air Date: ' }}</span>{{ entityDate }}
+          </div>
+          <div class="additional-info" v-if="entity.original_language">
+            <span>Original Language: </span>{{ entity.original_language }}
+          </div>
+          <div class="additional-info" v-if="entity.status">
+            <span>Status: </span>{{ entity.status }}
+          </div>
+          <div class="rating">{{ entity.vote_average }}</div>
         </div>
       </div>
       <div class="trailers" v-if="trailers.length">
@@ -57,10 +56,8 @@ import { ref, onMounted, watch, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useMovieStore } from '@/store/movies'
 import { useSeriesStore } from '@/store/series'
-import { useGenreStore } from '@/store/genres'
 import type { Movie } from '@/types/movie'
 import type { Series } from '@/types/series'
-import type { Genre } from '@/types/genres'
 import type { Recommendation } from '@/types/recommendation'
 import type { Trailer } from '@/types/trailer'
 
@@ -68,9 +65,7 @@ const route = useRoute()
 const router = useRouter()
 const movieStore = useMovieStore()
 const seriesStore = useSeriesStore()
-const genreStore = useGenreStore()
 const entity = ref<Movie | Series | null>(null)
-const genres = ref<Genre[]>([])
 const recommendations = ref<Recommendation[]>([])
 const trailers = ref<Trailer[]>([])
 const isMovie = ref(true)
@@ -80,7 +75,6 @@ const goBack = () => {
 }
 
 const fetchDetails = async (id: number) => {
-  await genreStore.fetchGenres()
   if (isMovie.value) {
     await movieStore.fetchMovieDetail(id)
     entity.value = movieStore.movieDetail
@@ -95,9 +89,6 @@ const fetchDetails = async (id: number) => {
     recommendations.value = seriesStore.recommendations
     await seriesStore.fetchTrailers(id)
     trailers.value = seriesStore.trailers
-  }
-  if (entity.value && entity.value.genre_ids) {
-    genres.value = genreStore.genres.filter(genre => entity.value?.genre_ids?.includes(genre.id))
   }
 }
 
@@ -134,7 +125,3 @@ const recommendationTitle = (recommendation: Recommendation) => {
   return isMovie.value ? recommendation.title : recommendation.name
 }
 </script>
-
-<style>
-
-</style>
