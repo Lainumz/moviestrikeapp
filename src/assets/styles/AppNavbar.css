@@ -25,7 +25,7 @@
 .navbar-right {
   display: flex;
   align-items: center;
-  margin-right: 1rem; /* Agrega margen a la derecha */
+  margin-right: 1.5rem; /* Agrega margen a la derecha */
 }
 
 .logo {

@@ -8,6 +8,7 @@
       <router-link to="/movies">Películas</router-link>
       <router-link to="/series">Series</router-link>
       <router-link to="/new-releases">Estrenos</router-link>
+      <router-link to="/thank-you">Agradecimiento</router-link>
     </div>
     <div class="navbar-right">
       <input type="text" v-model="searchQuery" @keyup.enter="searchMovies" placeholder="Buscar películas..." />
