@@ -35,6 +35,5 @@ html, body, #app {
 .content {
   flex: 1;
   margin-top: 80px;
-  padding-bottom: 60px;
 }
 </style>
