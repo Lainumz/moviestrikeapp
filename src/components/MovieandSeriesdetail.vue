@@ -92,11 +92,19 @@ const fetchDetails = async (id: number) => {
   }
 }
 
+const scrollToTop = () => {
+  window.scrollTo({
+    top: 0,
+    behavior: 'smooth'
+  })
+}
+
 onMounted(() => {
   const id = route.params.id
   if (id) {
     isMovie.value = route.name === 'movieDetail'
     fetchDetails(Number(id))
+    scrollToTop()
   }
 })
 
@@ -104,6 +112,7 @@ watch(() => route.params.id, (newId) => {
   if (newId) {
     isMovie.value = route.name === 'movieDetail'
     fetchDetails(Number(newId))
+    scrollToTop()
   }
 })
 
