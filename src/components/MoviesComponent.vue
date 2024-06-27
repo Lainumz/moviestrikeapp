@@ -65,7 +65,7 @@ const filterMovies = () => {
   } else {
     filteredMovies.value = movieStore.movies
   }
-  currentPage.value = 1 // Reset to first page on filter change
+  currentPage.value = 1
 }
 
 const nextPage = () => {
@@ -82,7 +82,7 @@ const prevPage = () => {
 
 onMounted(async () => {
   await genreStore.fetchGenres()
-  await movieStore.fetchMovies(10) // Cambiar a 10 páginas
+  await movieStore.fetchMovies(10)
   genres.value = genreStore.genres
   movies.value = movieStore.movies
   filteredMovies.value = movieStore.movies

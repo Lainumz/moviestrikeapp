@@ -83,7 +83,7 @@ const nextPage = () => {
 
 onMounted(async () => {
   await genreStore.fetchSeriesGenres()
-  await seriesStore.fetchSeries(20) // Ajusta el número de páginas que deseas obtener para más variedad
+  await seriesStore.fetchSeries(20)
   genres.value = genreStore.genres
   series.value = seriesStore.series
   filteredSeries.value = seriesStore.series

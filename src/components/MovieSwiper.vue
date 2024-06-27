@@ -44,7 +44,7 @@ const props = defineProps<{
 const currentIndex = ref(0)
 
 const totalSlides = computed(() => props.items.length)
-const slidesToShow = computed(() => (props.featured ? 5 : 10)) // Aseguramos que sea consistente con el CSS
+const slidesToShow = computed(() => (props.featured ? 5 : 10))
 const maxIndex = computed(() => totalSlides.value - slidesToShow.value)
 
 const wrapperStyle = computed(() => ({

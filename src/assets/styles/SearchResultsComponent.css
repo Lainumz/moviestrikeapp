@@ -1,5 +1,5 @@
 .search-results {
-    margin-top: 80px; /* Ajusta este valor si el navbar es más alto */
+    margin-top: 80px; 
     color: white;
   }
 
@@ -35,9 +35,9 @@
     padding: 5px 0;
     position: absolute;
     z-index: 1;
-    bottom: 105%; /* Posición encima de la imagen */
+    bottom: 105%; 
     left: 50%;
-    margin-left: -100px; /* Centrar el tooltip */
+    margin-left: -100px; 
     opacity: 0;
     transition: opacity 0.3s;
   }

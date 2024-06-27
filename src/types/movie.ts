@@ -7,7 +7,7 @@ export interface Movie {
   genre_ids: number[];
   release_date: string;
   vote_average: number;
-  original_language?: string; // Añadido
-  status?: string; // Añadido
+  original_language?: string;
+  status?: string;
 }
 /* eslint-enable camelcase */

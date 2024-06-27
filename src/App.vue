@@ -18,7 +18,7 @@ html, body, #app {
   height: 100%;
   margin: 0;
   padding: 0px;
-  background-color: rgba(18, 17, 17, 1); /* Fondo con el color 121111 al 95% */
+  background-color: rgba(18, 17, 17, 1);
 }
 
 #app {
@@ -34,7 +34,7 @@ html, body, #app {
 
 .content {
   flex: 1;
-  margin-top: 80px; /* Ajusta este valor si el navbar es más alto */
-  padding-bottom: 60px; /* Espacio para el footer */
+  margin-top: 80px;
+  padding-bottom: 60px;
 }
 </style>

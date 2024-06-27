@@ -1,6 +1,6 @@
 <template>
   <div class="new-releases">
-    <h1>New Releases</h1>
+    <h1>Estrenos</h1>
     <div v-if="loading">Loading new releases...</div>
     <div v-else>
       <div v-if="newReleases.length">
@@ -14,7 +14,7 @@
                   </div>
                   <div class="flip-card-back">
                     <h3>{{ movie.title }}</h3>
-                    <p>{{ movie.overview }}</p>
+                    <p>{{ truncateOverview(movie.overview) }}</p>
                   </div>
                 </div>
               </div>
@@ -23,7 +23,7 @@
         </div>
       </div>
       <div v-else>
-        <p>No new releases available.</p>
+        <p>No hay nuevos estrenos</p>
       </div>
     </div>
   </div>
@@ -40,10 +40,14 @@ const newReleases = ref<Movie[]>(movieStore.newReleases)
 const loading = ref(true)
 
 onMounted(async () => {
-  await movieStore.fetchNewReleases() // Llamada sin argumentos
+  await movieStore.fetchNewReleases()
   newReleases.value = movieStore.newReleases
   loading.value = false
 })
+
+function truncateOverview (overview: string, maxLength = 100): string {
+  return overview.length > maxLength ? overview.substring(0, maxLength) + '...' : overview
+}
 </script>
 
 <style src="../assets/styles/NewReleasesComponent.css"></style>

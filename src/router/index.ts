@@ -35,7 +35,7 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: '/series/:id',
     name: 'seriesDetail',
-    component: MovieAndSeriesDetailView // Usando el componente combinado
+    component: MovieAndSeriesDetailView
   },
   {
     path: '/series',

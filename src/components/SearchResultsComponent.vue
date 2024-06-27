@@ -36,7 +36,6 @@ if (Array.isArray(route.query.q)) {
 const movieStore = useMovieStore()
 const searchResults = ref<Movie[]>(movieStore.searchResults)
 
-// Watch for changes in the route query
 watch(() => route.query.q, async (newQuery) => {
   if (Array.isArray(newQuery)) {
     query.value = newQuery[0] || ''

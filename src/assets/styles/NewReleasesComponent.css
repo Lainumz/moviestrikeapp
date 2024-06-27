@@ -4,11 +4,11 @@
   text-align: center;
 }
 
-.movies-grid {
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
+.movies-flexbox {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
   gap: 20px;
-  justify-items: center;
 }
 
 .movie {
@@ -58,4 +58,8 @@
   justify-content: center;
   align-items: center;
   padding: 20px;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
+
+
