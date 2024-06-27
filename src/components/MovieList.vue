@@ -43,7 +43,7 @@ const recommendedMovies = ref<Movie[]>([])
 onMounted(async () => {
   try {
     await genreStore.fetchGenres()
-    await movieStore.fetchMovies(41) // Asegúrate de pedir suficientes películas
+    await movieStore.fetchMovies(41)
     genres.value = genreStore.genres
     movies.value = movieStore.movies
 
@@ -61,7 +61,6 @@ onMounted(async () => {
       console.log('Popular Movies:', popularMovies.value)
       console.log('Recommended Movies:', recommendedMovies.value)
     } else {
-      // Maneja el caso en que no hay suficientes películas
       console.warn('No hay suficientes películas para llenar todas las categorías.')
     }
   } catch (error) {

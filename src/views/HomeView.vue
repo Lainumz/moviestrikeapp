@@ -10,7 +10,7 @@ import MovieList from '@/components/MovieList.vue'
 
 <style scoped>
 .home {
-  margin-top: 80px; /* Ajusta este valor si el navbar es más alto */
+  margin-top: 80px;
   color: white;
 }
 </style>
