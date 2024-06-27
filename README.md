@@ -44,7 +44,7 @@ MovieStrikeApp es una aplicación web similar a Netflix que permite a los usuari
    npm run dev
 
 ## Estructura del proyecto
-
+```
 moviestrikeapp/
 ├── node_modules/
 ├── public/
@@ -102,4 +102,4 @@ moviestrikeapp/
 ├── babel.config.js
 ├── package.json
 ├── tsconfig.json
-└── vue.config.js
+└── vue.config.js ```
