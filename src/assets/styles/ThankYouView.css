@@ -1,0 +1,47 @@
+.thank-you-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  padding: 20px;
+  padding-top: 80px; /* Asegura que la tarjeta no esté pegada al navbar */
+}
+
+.thank-you-content {
+  max-width: 600px;
+  text-align: center;
+  background-color: #2b2e31;
+  padding: 40px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+}
+
+.thank-you-content h1 {
+  font-size: 2.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.thank-you-content p {
+  font-size: 1.2rem;
+  margin-bottom: 1rem;
+  line-height: 1.5;
+}
+
+.home-link {
+  display: inline-block;
+  margin-top: 2rem;
+  padding: 0.75rem 1.5rem;
+  background-color: #ffc10783;
+  color: white;
+  text-decoration: none;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+}
+
+.home-link:hover {
+  background-color: #ffc1074f;
+}
+
+
+
+  

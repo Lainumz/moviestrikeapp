@@ -5,12 +5,18 @@ import MoviesView from '../views/MoviesView.vue'
 import NewReleasesView from '../views/NewReleasesView.vue'
 import SearchResultsView from '../views/SearchResultsView.vue'
 import SeriesView from '../views/SeriesView.vue'
+import ThankYouView from '../components/ThankYouView.vue'
 
 const routes: Array<RouteRecordRaw> = [
   {
     path: '/',
     name: 'home',
     component: HomeView
+  },
+  {
+    path: '/thank-you',
+    name: 'thank-you',
+    component: ThankYouView
   },
   {
     path: '/movie/:id',
