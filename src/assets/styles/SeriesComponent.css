@@ -1,5 +1,5 @@
 .series {
-  margin-top: 80px; 
+  margin-top: 80px;
   color: white;
 }
 
@@ -37,8 +37,9 @@
 }
 
 .serie img {
-  width: 200px;
-  height: 300px;
+  width: 100%;
+  max-width: 200px;
+  height: auto;
   transition: transform 0.2s ease-in-out;
   cursor: pointer;
   border-radius: 5%;
@@ -68,7 +69,7 @@
 }
 
 .pagination {
-  margin-top: 20px;
+  margin: 20px 0; /* Añadido margen superior e inferior */
   display: flex;
   justify-content: center;
   align-items: center;
@@ -104,4 +105,62 @@
 
 h1 {
   color: white;
+}
+
+/* Media Queries for Mobile Devices */
+@media (max-width: 768px) {
+  .serie img {
+    width: 150px;
+    height: 225px;
+  }
+
+  .pagination button,
+  .pagination span {
+    padding: 5px;
+    margin: 0 5px;
+  }
+
+  .genre-select {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .genre-select label,
+  .genre-select select {
+    width: 100%;
+    text-align: center;
+  }
+
+  .genre-select select {
+    margin-top: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .serie img {
+    width: 100px;
+    height: 150px;
+  }
+
+  .pagination button,
+  .pagination span {
+    padding: 5px;
+    margin: 0 2px;
+  }
+
+  .genre-select {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .genre-select label,
+  .genre-select select {
+    width: 100%;
+    text-align: center;
+  }
+
+  .genre-select select {
+    margin-top: 10px;
+  }
 }

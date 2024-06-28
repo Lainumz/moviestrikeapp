@@ -12,7 +12,7 @@
           </option>
         </select>
       </div>
-      <div v-if="paginatedSeries.length">
+      <div v-if="filteredSeries.length">
         <div v-for="serie in paginatedSeries" :key="serie.id" class="serie">
           <router-link :to="{ name: 'seriesDetail', params: { id: serie.id } }">
             <div class="serie-card">

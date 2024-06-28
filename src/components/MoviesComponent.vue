@@ -13,13 +13,15 @@
         </select>
       </div>
       <div v-if="filteredMovies.length">
-        <div v-for="movie in paginatedMovies" :key="movie.id" class="movie">
-          <router-link :to="{ name: 'movieDetail', params: { id: movie.id } }">
-            <div class="movie-card">
-              <img :src="'https://image.tmdb.org/t/p/w500' + movie.poster_path" :alt="movie.title" />
-              <div class="movie-title">{{ movie.title }}</div>
-            </div>
-          </router-link>
+        <div class="movies-grid">
+          <div v-for="movie in paginatedMovies" :key="movie.id" class="movie">
+            <router-link :to="{ name: 'movieDetail', params: { id: movie.id } }">
+              <div class="movie-card">
+                <img :src="'https://image.tmdb.org/t/p/w500' + movie.poster_path" :alt="movie.title" />
+                <div class="movie-title">{{ movie.title }}</div>
+              </div>
+            </router-link>
+          </div>
         </div>
       </div>
       <div v-else>
@@ -95,3 +97,4 @@ onMounted(async () => {
   loading.value = false
 })
 </script>
+
