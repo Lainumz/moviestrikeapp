@@ -1,98 +1,166 @@
 .series {
-    margin-top: 80px; 
-    color: white;
-  }
-  
-  .genre-select {
-    margin-bottom: 20px;
-  }
-  
-  .genre-select label {
-    margin-right: 10px;
-    color: white;
-  }
-  
-  .genre-select select {
-    padding: 5px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    background-color: #333;
-    color: white;
-  }
-  
-  .genre-select select option {
-    background-color: #333;
-    color: white;
-  }
-  
-  .serie {
-    display: inline-block;
-    margin: 10px;
-    text-align: center;
-    position: relative;
-  }
-  
+  margin-top: 80px;
+  color: white;
+}
+
+.genre-select {
+  margin-bottom: 20px;
+}
+
+.genre-select label {
+  margin-right: 10px;
+  color: white;
+}
+
+.genre-select select {
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: #333;
+  color: white;
+}
+
+.genre-select select option {
+  background-color: #333;
+  color: white;
+}
+
+.serie {
+  display: inline-block;
+  margin: 10px;
+  text-align: center;
+  position: relative;
+}
+
+.serie-card {
+  position: relative;
+}
+
+.serie img {
+  width: 100%;
+  max-width: 200px;
+  height: auto;
+  transition: transform 0.2s ease-in-out;
+  cursor: pointer;
+  border-radius: 5%;
+}
+
+.serie img:hover {
+  transform: scale(1.05);
+}
+
+.serie-title {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  background-color: rgba(0, 0, 0, 0.8);
+  color: white;
+  text-align: center;
+  padding: 5px 0;
+  font-size: 14px;
+  border-bottom-left-radius: 5%;
+  border-bottom-right-radius: 5%;
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out;
+}
+
+.serie-card:hover .serie-title {
+  opacity: 1;
+}
+
+.pagination {
+  margin: 20px 0; /* Añadido margen superior e inferior */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.pagination button {
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  background-color: #444;
+  color: white;
+  cursor: pointer;
+  margin: 0 10px;
+}
+
+.pagination button:disabled {
+  background-color: #555;
+  cursor: not-allowed;
+}
+
+.pagination span {
+  margin: 0 5px;
+  padding: 5px 10px;
+  cursor: pointer;
+  border-radius: 5px;
+  background-color: #333;
+  color: white;
+}
+
+.pagination span.active-page {
+  background-color: #555;
+}
+
+h1 {
+  color: white;
+}
+
+/* Media Queries for Mobile Devices */
+@media (max-width: 768px) {
   .serie img {
-    width: 200px;
-    height: 300px;
-    transition: transform 0.2s ease-in-out;
-    cursor: pointer;
-    border-radius: 5%;
+    width: 150px;
+    height: 225px;
   }
-  
-  .serie img:hover {
-    transform: scale(1.05)
+
+  .pagination button,
+  .pagination span {
+    padding: 5px;
+    margin: 0 5px;
   }
-  
-  .tooltip {
-    position: relative;
-    display: inline-block;
-  }
-  
-  .tooltiptext {
-    visibility: hidden;
-    width: 200px;
-    background-color: rgba(0, 0, 0, 0.8);
-    color: #fff;
-    text-align: center;
-    border-radius: 5px;
-    padding: 5px 0;
-    position: absolute;
-    z-index: 1;
-    bottom: 105%; 
-    left: 50%;
-    margin-left: -100px; 
-    opacity: 0;
-    transition: opacity 0.3s;
-  }
-  
-  .tooltip:hover .tooltiptext {
-    visibility: visible;
-    opacity: 1;
-  }
-  
-  .pagination {
-    margin-top: 20px;
+
+  .genre-select {
     display: flex;
-    justify-content: center;
+    flex-direction: column;
     align-items: center;
   }
-  
-  .pagination button {
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    background-color: #444;
-    color: white;
-    cursor: pointer;
-    margin: 0 10px;
+
+  .genre-select label,
+  .genre-select select {
+    width: 100%;
+    text-align: center;
   }
-  
-  .pagination button:disabled {
-    background-color: #555;
-    cursor: not-allowed;
+
+  .genre-select select {
+    margin-top: 10px;
   }
-  
-  h1 {
-    color: white;
+}
+
+@media (max-width: 480px) {
+  .serie img {
+    width: 100px;
+    height: 150px;
   }
+
+  .pagination button,
+  .pagination span {
+    padding: 5px;
+    margin: 0 2px;
+  }
+
+  .genre-select {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .genre-select label,
+  .genre-select select {
+    width: 100%;
+    text-align: center;
+  }
+
+  .genre-select select {
+    margin-top: 10px;
+  }
+}
