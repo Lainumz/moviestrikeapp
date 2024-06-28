@@ -15,9 +15,9 @@
       <div v-if="filteredMovies.length">
         <div v-for="movie in paginatedMovies" :key="movie.id" class="movie">
           <router-link :to="{ name: 'movieDetail', params: { id: movie.id } }">
-            <div class="tooltip">
+            <div class="movie-card">
               <img :src="'https://image.tmdb.org/t/p/w500' + movie.poster_path" :alt="movie.title" />
-              <span class="tooltiptext">{{ movie.title }}</span>
+              <div class="movie-title">{{ movie.title }}</div>
             </div>
           </router-link>
         </div>
@@ -26,9 +26,11 @@
         <p>No movies available.</p>
       </div>
       <div class="pagination">
-        <button @click="prevPage" :disabled="currentPage === 1">Previous</button>
-        <span>Page {{ currentPage }} of {{ totalPages }}</span>
-        <button @click="nextPage" :disabled="currentPage === totalPages">Next</button>
+        <button @click="prevPage" :disabled="currentPage === 1">◀</button>
+        <span v-for="page in totalPages" :key="page" :class="{'active-page': currentPage === page}" @click="goToPage(page)">
+          {{ page }}
+        </span>
+        <button @click="nextPage" :disabled="currentPage === totalPages">▶</button>
       </div>
     </div>
   </div>
@@ -78,6 +80,10 @@ const prevPage = () => {
   if (currentPage.value > 1) {
     currentPage.value--
   }
+}
+
+const goToPage = (page: number) => {
+  currentPage.value = page
 }
 
 onMounted(async () => {

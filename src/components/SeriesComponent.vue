@@ -15,9 +15,9 @@
       <div v-if="paginatedSeries.length">
         <div v-for="serie in paginatedSeries" :key="serie.id" class="serie">
           <router-link :to="{ name: 'seriesDetail', params: { id: serie.id } }">
-            <div class="tooltip">
+            <div class="serie-card">
               <img :src="'https://image.tmdb.org/t/p/w500' + serie.poster_path" :alt="serie.name" />
-              <span class="tooltiptext">{{ serie.name }}</span>
+              <div class="serie-title">{{ serie.name }}</div>
             </div>
           </router-link>
         </div>
@@ -26,9 +26,11 @@
         <p>No series available.</p>
       </div>
       <div class="pagination">
-        <button @click="prevPage" :disabled="currentPage === 1">Previous</button>
-        <span>Page {{ currentPage }} of {{ totalPages }}</span>
-        <button @click="nextPage" :disabled="currentPage === totalPages">Next</button>
+        <button @click="prevPage" :disabled="currentPage === 1">◀</button>
+        <span v-for="page in totalPages" :key="page" :class="{'active-page': currentPage === page}" @click="goToPage(page)">
+          {{ page }}
+        </span>
+        <button @click="nextPage" :disabled="currentPage === totalPages">▶</button>
       </div>
     </div>
   </div>
@@ -81,6 +83,10 @@ const nextPage = () => {
   }
 }
 
+const goToPage = (page: number) => {
+  currentPage.value = page
+}
+
 onMounted(async () => {
   await genreStore.fetchSeriesGenres()
   await seriesStore.fetchSeries(20)
@@ -90,7 +96,3 @@ onMounted(async () => {
   loading.value = false
 })
 </script>
-
-<style>
-
-</style>
