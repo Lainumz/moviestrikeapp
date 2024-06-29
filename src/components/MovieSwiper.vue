@@ -2,7 +2,7 @@
   <div class="carousel" :class="{ 'featured-carousel': featured }">
     <h3>{{ title }}</h3>
     <div class="carousel-container">
-      <button v-if="!featured && currentIndex > 0" @click="prevSlide" class="nav prev">‹</button>
+      <button v-show="showPrevArrow" @click="prevSlide" class="nav prev">‹</button>
       <div class="carousel-wrapper" :style="wrapperStyle">
         <div v-for="movie in items" :key="movie.id" class="carousel-slide" :class="{ 'featured-slide': featured }">
           <router-link :to="getDetailRoute(movie)" class="movie-link">
@@ -24,7 +24,7 @@
           </router-link>
         </div>
       </div>
-      <button v-if="!featured && currentIndex < maxIndex" @click="nextSlide" class="nav next">›</button>
+      <button v-show="showNextArrow" @click="nextSlide" class="nav next">›</button>
     </div>
   </div>
 </template>
@@ -44,7 +44,7 @@ const props = defineProps<{
 const currentIndex = ref(0)
 
 const totalSlides = computed(() => props.items.length)
-const slidesToShow = computed(() => (props.featured ? 5 : 10))
+const slidesToShow = computed(() => (props.featured ? 5 : 8)) // Mostrar 8 películas en lugar de 10
 const maxIndex = computed(() => totalSlides.value - slidesToShow.value)
 
 const wrapperStyle = computed(() => ({
@@ -53,18 +53,17 @@ const wrapperStyle = computed(() => ({
 }))
 
 const nextSlide = () => {
-  if (currentIndex.value < maxIndex.value) {
-    currentIndex.value++
-  }
+  currentIndex.value = (currentIndex.value + 1) % totalSlides.value // Desplazamiento circular
 }
 
 const prevSlide = () => {
-  if (currentIndex.value > 0) {
-    currentIndex.value--
-  }
+  currentIndex.value = (currentIndex.value - 1 + totalSlides.value) % totalSlides.value // Desplazamiento circular
 }
 
 const getDetailRoute = (movie: Movie) => {
   return props.isSerie ? `/serie/${movie.id}` : `/movie/${movie.id}`
 }
+
+const showPrevArrow = computed(() => totalSlides.value > slidesToShow.value)
+const showNextArrow = computed(() => totalSlides.value > slidesToShow.value || currentIndex.value < maxIndex.value)
 </script>
