@@ -220,7 +220,7 @@ h1 {
   }
 
   .recommendations ul {
-    flex-direction: column;
+    flex-direction: row;
   }
 
   .recommendations img {
