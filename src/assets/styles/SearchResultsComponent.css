@@ -3,20 +3,20 @@
     color: white;
   }
 
-  .movie {
-    display: inline-block;
+  .movie1 {
+    display: inline;
     margin: 10px;
     text-align: center;
     position: relative;
   }
 
-  .movie img {
+  .movie1 img {
     width: 200px;
     height: 300px;
     transition: transform 0.2s ease-in-out;
   }
 
-  .movie img:hover {
+  .movie1 img:hover {
     transform: scale(1.05);
   }
 
