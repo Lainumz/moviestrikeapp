@@ -62,4 +62,73 @@
   text-overflow: ellipsis;
 }
 
+/* Media query for smaller screens */
+@media (max-width: 600px) {
+  .movies-flexbox {
+    gap: 10px;
+  }
+
+  .movie {
+    width: 150px;
+    height: 150px;
+  }
+
+  .flip-card-inner {
+    transition: transform 0.6s;
+  }
+
+  .flip-card-front, .flip-card-back {
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  }
+
+  .flip-card-back {
+    padding: 15px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .movies-flexbox {
+    gap: 10px;
+  }
+
+  .movie {
+    width: 150px;
+    height: 220px;
+  }
+
+  .flip-card-inner {
+    transition: transform 0.6s;
+  }
+
+  .flip-card-front, .flip-card-back {
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  }
+
+  .flip-card-back {
+    padding: 15px;
+  }
+}
+
+@media (min-width: 1200px) {
+  .movies-flexbox {
+    gap: 10px;
+  }
+
+  .movie {
+    width: 150px;
+    height: 300px;
+  }
+
+  .flip-card-inner {
+    transition: transform 0.6s;
+  }
+
+  .flip-card-front, .flip-card-back {
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  }
+
+  .flip-card-back {
+    padding: 15px;
+  }
+}
 

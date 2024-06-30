@@ -44,20 +44,28 @@ const props = defineProps<{
 const currentIndex = ref(0)
 
 const totalSlides = computed(() => props.items.length)
-const slidesToShow = computed(() => (props.featured ? 5 : 8)) // Mostrar 8 películas en lugar de 10
+const slidesToShow = computed(() => (props.featured ? 5 : 8))
 const maxIndex = computed(() => totalSlides.value - slidesToShow.value)
 
 const wrapperStyle = computed(() => ({
   transform: `translateX(-${currentIndex.value * (100 / slidesToShow.value)}%)`,
-  width: `${(totalSlides.value / slidesToShow.value) * 100}%`
+  width: `${(totalSlides.value * 100 / slidesToShow.value)}%`
 }))
 
 const nextSlide = () => {
-  currentIndex.value = (currentIndex.value + 1) % totalSlides.value // Desplazamiento circular
+  if (currentIndex.value < maxIndex.value) {
+    currentIndex.value++
+  } else {
+    currentIndex.value = 6
+  }
 }
 
 const prevSlide = () => {
-  currentIndex.value = (currentIndex.value - 1 + totalSlides.value) % totalSlides.value // Desplazamiento circular
+  if (currentIndex.value > 0) {
+    currentIndex.value--
+  } else {
+    currentIndex.value = maxIndex.value
+  }
 }
 
 const getDetailRoute = (movie: Movie) => {
@@ -65,5 +73,6 @@ const getDetailRoute = (movie: Movie) => {
 }
 
 const showPrevArrow = computed(() => totalSlides.value > slidesToShow.value)
-const showNextArrow = computed(() => totalSlides.value > slidesToShow.value || currentIndex.value < maxIndex.value)
+const showNextArrow = computed(() => totalSlides.value > slidesToShow.value)
 </script>
+
