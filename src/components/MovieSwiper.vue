@@ -2,35 +2,38 @@
   <div class="carousel" :class="{ 'featured-carousel': featured }">
     <h3>{{ title }}</h3>
     <div class="carousel-container">
-      <button v-show="showPrevArrow" @click="prevSlide" class="nav prev">‹</button>
+      <button
+        :class="{ 'nav': true, 'prev': true, 'disabled': !canGoPrev }"
+        @click="prevSlide"
+        :disabled="!canGoPrev"
+      >
+        ‹
+      </button>
       <div class="carousel-wrapper" :style="wrapperStyle">
         <div v-for="movie in items" :key="movie.id" class="carousel-slide" :class="{ 'featured-slide': featured }">
           <router-link :to="getDetailRoute(movie)" class="movie-link">
-            <div v-if="featured" class="flip-card">
-              <div class="flip-card-inner">
-                <div class="flip-card-front">
-                  <img :src="'https://image.tmdb.org/t/p/w500' + movie.poster_path" :alt="movie.title" />
-                </div>
-                <div class="flip-card-back">
-                  <h4>{{ movie.title }}</h4>
-                  <p>{{ movie.overview }}</p>
-                </div>
-              </div>
-            </div>
-            <div v-else class="tooltip">
+            <div class="image-container">
               <img :src="'https://image.tmdb.org/t/p/w500' + movie.poster_path" :alt="movie.title" />
-              <span class="tooltiptext">{{ movie.title }}</span>
+              <div class="movie-overlay">{{ movie.title }}</div>
             </div>
           </router-link>
         </div>
       </div>
-      <button v-show="showNextArrow" @click="nextSlide" class="nav next">›</button>
+      <button
+        :class="{ 'nav': true, 'next': true, 'disabled': !canGoNext }"
+        @click="nextSlide"
+        :disabled="!canGoNext"
+      >
+        ›
+      </button>
     </div>
   </div>
 </template>
 
+
+
 <script setup lang="ts">
-import { ref, computed, defineProps } from 'vue'
+import { ref, computed, defineProps, onMounted } from 'vue'
 import type { Movie } from '@/types/movie'
 import '../assets/styles/MovieSwiper.css'
 
@@ -44,35 +47,79 @@ const props = defineProps<{
 const currentIndex = ref(0)
 
 const totalSlides = computed(() => props.items.length)
-const slidesToShow = computed(() => (props.featured ? 5 : 8))
+const slidesToShow = ref(8) // Valor inicial
+
+const updateSlidesToShow = () => {
+  const width = window.innerWidth
+  if (width >= 1200) {
+    slidesToShow.value = props.featured ? 5 : 8
+  } else if (width >= 992) {
+    slidesToShow.value = props.featured ? 4 : 6
+  } else if (width >= 768) {
+    slidesToShow.value = props.featured ? 3 : 4
+  } else {
+    slidesToShow.value = props.featured ? 2 : 3
+  }
+}
+
+onMounted(() => {
+  updateSlidesToShow()
+  window.addEventListener('resize', updateSlidesToShow)
+})
+
 const maxIndex = computed(() => totalSlides.value - slidesToShow.value)
 
 const wrapperStyle = computed(() => ({
   transform: `translateX(-${currentIndex.value * (100 / slidesToShow.value)}%)`,
-  width: `${(totalSlides.value * 100 / slidesToShow.value)}%`
 }))
 
 const nextSlide = () => {
-  if (currentIndex.value < maxIndex.value) {
+  if (canGoNext.value) {
     currentIndex.value++
-  } else {
-    currentIndex.value = 6
   }
 }
 
 const prevSlide = () => {
-  if (currentIndex.value > 0) {
+  if (canGoPrev.value) {
     currentIndex.value--
-  } else {
-    currentIndex.value = maxIndex.value
   }
 }
+
+const canGoNext = computed(() => currentIndex.value < maxIndex.value)
+const canGoPrev = computed(() => currentIndex.value > 0)
 
 const getDetailRoute = (movie: Movie) => {
   return props.isSerie ? `/serie/${movie.id}` : `/movie/${movie.id}`
 }
-
-const showPrevArrow = computed(() => totalSlides.value > slidesToShow.value)
-const showNextArrow = computed(() => totalSlides.value > slidesToShow.value)
 </script>
 
+
+<style scoped>
+.carousel-container {
+  position: relative;
+}
+
+.nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  border: none;
+  padding: 10px;
+  cursor: pointer;
+  z-index: 10;
+  transition: opacity 0.3s;
+}
+
+.nav.prev {
+  left: 0;
+}
+
+.nav.next {
+  right: 0;
+}
+
+.nav.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+</style>
