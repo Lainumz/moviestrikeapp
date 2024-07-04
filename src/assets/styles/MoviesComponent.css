@@ -76,27 +76,7 @@
   opacity: 1;
 }
 
-.pagination {
-  margin: 20px 0; /* Añadido margen superior e inferior */
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
 
-.pagination button {
-  padding: 10px;
-  border: none;
-  border-radius: 5px;
-  background-color: #444;
-  color: white;
-  cursor: pointer;
-  margin: 0 10px;
-}
-
-.pagination button:disabled {
-  background-color: #555;
-  cursor: not-allowed;
-}
 
 .pagination span {
   margin: 0 5px;
@@ -107,13 +87,6 @@
   color: white;
 }
 
-.pagination span.active-page {
-  background-color: #555;
-}
-
-h1 {
-  color: white;
-}
 
 /* Media Queries for Mobile Devices */
 @media (max-width: 1200px) {
