@@ -3,23 +3,6 @@
   color: white;
 }
 
-.genre-select {
-  margin-bottom: 20px;
-}
-
-.genre-select label {
-  margin-right: 10px;
-  color: white;
-}
-
-.genre-select select {
-  padding: 5px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  background-color: #333;
-  color: white;
-}
-
 .genre-select select option {
   background-color: #333;
   color: white;
@@ -29,10 +12,6 @@
   display: inline-block;
   margin: 10px;
   text-align: center;
-  position: relative;
-}
-
-.serie-card {
   position: relative;
 }
 
