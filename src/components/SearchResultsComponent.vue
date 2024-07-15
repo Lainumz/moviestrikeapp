@@ -1,21 +1,21 @@
 <template>
-    <div class="search-results">
-      <h1>Resultados de la Búsqueda</h1>
-      <div v-if="searchResults.length">
-        <div v-for="movie in searchResults" :key="movie.id" class="movie1">
-          <router-link :to="{ name: 'movieDetail', params: { id: movie.id } }">
-            <div class="tooltip">
-              <img :src="'https://image.tmdb.org/t/p/w500' + movie.poster_path" :alt="movie.title" />
-              <span class="tooltiptext">{{ movie.title }}</span>
-            </div>
-          </router-link>
-        </div>
-      </div>
-      <div v-else>
-        <p>No results found.</p>
+  <div class="search-results">
+    <h1>Resultados de la Búsqueda</h1>
+    <div v-if="searchResults.length">
+      <div v-for="movie in searchResults" :key="movie.id" class="movie">
+        <router-link :to="{ name: 'movieDetail', params: { id: movie.id } }">
+          <div class="tooltip">
+            <img :src="'https://image.tmdb.org/t/p/w500' + movie.poster_path" :alt="movie.title" />
+            <span class="tooltiptext">{{ movie.title }}</span>
+          </div>
+        </router-link>
       </div>
     </div>
-  </template>
+    <div v-else>
+      <p>No results found.</p>
+    </div>
+  </div>
+</template>
 
 <script setup lang="ts">
 import { ref, watch } from 'vue'
@@ -53,7 +53,3 @@ watch(() => route.query.q, async (newQuery) => {
   }
 }, { immediate: true })
 </script>
-
-  <style>
-
-  </style>
